@@ -20,7 +20,7 @@
 
 ## 项目简介
 
-PageIndex Agent UI 是一个面向 PDF 文档的智能问答系统。它基于开源项目 [PageIndex](https://github.com/VectifyAI/PageIndex) 的核心索引算法，并在其上搭建了完整的 **Agentic RAG**（检索增强生成）交互界面。
+PageIndex Chat UI 是一个面向 PDF 文档的智能问答系统。它基于开源项目 [PageIndex](https://github.com/VectifyAI/PageIndex) 的核心索引算法，并在其上搭建了完整的 **Agentic RAG**（检索增强生成）交互界面。
 
 ### 核心理念
 
@@ -126,7 +126,7 @@ uv run python app.py
 1. **文本模型**：填入模型名称、API Key 和 Base URL
 2. **视觉模型**（可选）：如需使用视觉模式，填入多模态模型的配置
 
-配置会保存到 `config.json`（已 gitignore，不会被提交）。
+配置会保存到 `config.json`
 
 
 ## 使用指南
