@@ -110,6 +110,22 @@ uv run python app.py
 
 服务默认运行在 **http://localhost:5001**
 
+### ❓日志排查提示
+
+如果你在控制台看到类似日志：
+
+```text
+2026-03-16 05:49:05,653 - httpx - INFO - HTTP Request: POST http://<host>/v1/chat/completions "HTTP/1.1 200 OK"
+```
+
+这通常**不是报错**，而是 `httpx` 输出的 INFO 级别请求日志，表示一次模型 API 调用成功返回了 `200 OK`。
+
+只有出现以下情况才需要重点排查：
+
+- 状态码是 `4xx/5xx`（如 `401/403/429/500`）
+- 日志级别是 `ERROR` / `CRITICAL`
+- 响应内容包含 `Error:`、`timeout`、`connection refused` 等异常信息
+
 ### ⚙️首次配置
 
 启动后打开浏览器访问 `http://localhost:5001`，点击界面左上角的设置图标，配置：
