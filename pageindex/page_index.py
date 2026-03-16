@@ -9,6 +9,18 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
+def _normalize_yes_no(value, default='no'):
+    """Normalize model outputs to 'yes'/'no' strings for robust control flow."""
+    if value is None:
+        return default
+    text = str(value).strip().lower()
+    if text in {'yes', 'y', 'true', '1'}:
+        return 'yes'
+    if text in {'no', 'n', 'false', '0'}:
+        return 'no'
+    return default
+
+
 ################### check title in page #########################################################
 async def check_title_appearance(item, page_list, start_index=1, model=None):    
     title=item['title']
@@ -119,7 +131,7 @@ def toc_detector_single_page(content, model=None):
     response = ChatGPT_API(model=model, prompt=prompt)
     # print('response', response)
     json_content = extract_json(response)    
-    return json_content['toc_detected']
+    return _normalize_yes_no(json_content.get('toc_detected'), default='no')
 
 
 def check_if_toc_extraction_is_complete(content, toc, model=None):
@@ -137,7 +149,7 @@ def check_if_toc_extraction_is_complete(content, toc, model=None):
     prompt = prompt + '\n Document:\n' + content + '\n Table of contents:\n' + toc
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)
-    return json_content['completed']
+    return _normalize_yes_no(json_content.get('completed'), default='no')
 
 
 def check_if_toc_transformation_is_complete(content, toc, model=None):
@@ -155,7 +167,7 @@ def check_if_toc_transformation_is_complete(content, toc, model=None):
     prompt = prompt + '\n Raw Table of contents:\n' + content + '\n Cleaned Table of contents:\n' + toc
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)
-    return json_content['completed']
+    return _normalize_yes_no(json_content.get('completed'), default='no')
 
 def extract_toc_content(content, model=None):
     prompt = f"""
@@ -179,8 +191,14 @@ def extract_toc_content(content, model=None):
     new_response, finish_reason = ChatGPT_API_with_finish_reason(model=model, prompt=prompt, chat_history=chat_history)
     response = response + new_response
     if_complete = check_if_toc_transformation_is_complete(content, response, model)
-    
+
+    attempts = 1
+    max_attempts = 5
     while not (if_complete == "yes" and finish_reason == "finished"):
+        attempts += 1
+        if attempts > max_attempts:
+            raise Exception('Failed to complete table of contents after maximum retries')
+
         chat_history = [
             {"role": "user", "content": prompt}, 
             {"role": "assistant", "content": response},    
@@ -189,10 +207,6 @@ def extract_toc_content(content, model=None):
         new_response, finish_reason = ChatGPT_API_with_finish_reason(model=model, prompt=prompt, chat_history=chat_history)
         response = response + new_response
         if_complete = check_if_toc_transformation_is_complete(content, response, model)
-        
-        # Optional: Add a maximum retry limit to prevent infinite loops
-        if len(chat_history) > 5:  # Arbitrary limit of 10 attempts
-            raise Exception('Failed to complete table of contents after maximum retries')
     
     return response
 
@@ -214,7 +228,7 @@ def detect_page_index(toc_content, model=None):
 
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)
-    return json_content['page_index_given_in_toc']
+    return _normalize_yes_no(json_content.get('page_index_given_in_toc'), default='no')
 
 def toc_extractor(page_list, toc_page_list, model):
     def transform_dots_to_colon(text):
@@ -694,13 +708,13 @@ def check_toc(page_list, opt=None):
         print('toc found')
         toc_json = toc_extractor(page_list, toc_page_list, opt.model)
 
-        if toc_json['page_index_given_in_toc'] == 'yes':
+        if _normalize_yes_no(toc_json.get('page_index_given_in_toc')) == 'yes':
             print('index found')
             return {'toc_content': toc_json['toc_content'], 'toc_page_list': toc_page_list, 'page_index_given_in_toc': 'yes'}
         else:
             current_start_index = toc_page_list[-1] + 1
             
-            while (toc_json['page_index_given_in_toc'] == 'no' and 
+            while (_normalize_yes_no(toc_json.get('page_index_given_in_toc')) == 'no' and 
                    current_start_index < len(page_list) and 
                    current_start_index < opt.toc_check_page_num):
                 
@@ -714,7 +728,7 @@ def check_toc(page_list, opt=None):
                     break
 
                 additional_toc_json = toc_extractor(page_list, additional_toc_pages, opt.model)
-                if additional_toc_json['page_index_given_in_toc'] == 'yes':
+                if _normalize_yes_no(additional_toc_json.get('page_index_given_in_toc')) == 'yes':
                     print('index found')
                     return {'toc_content': additional_toc_json['toc_content'], 'toc_page_list': additional_toc_pages, 'page_index_given_in_toc': 'yes'}
 
@@ -949,6 +963,11 @@ async def verify_toc(page_list, list_result, start_index=1, N=None, model=None):
 
 ################### main process #########################################################
 async def meta_processor(page_list, mode=None, toc_content=None, toc_page_list=None, start_index=1, opt=None, logger=None):
+    if start_index is None:
+        if logger:
+            logger.info("start_index is None, fallback to 1")
+        start_index = 1
+
     print(mode)
     print(f'start_index: {start_index}')
     
@@ -1007,10 +1026,22 @@ async def process_large_node_recursively(node, page_list, opt=None, logger=None)
         
         if valid_node_toc_items and node['title'].strip() == valid_node_toc_items[0]['title'].strip():
             node['nodes'] = post_processing(valid_node_toc_items[1:], node['end_index'])
-            node['end_index'] = valid_node_toc_items[1]['start_index'] if len(valid_node_toc_items) > 1 else node['end_index']
+            if len(valid_node_toc_items) > 1:
+                next_start = (
+                    valid_node_toc_items[1].get('start_index')
+                    or valid_node_toc_items[1].get('physical_index')
+                )
+                if next_start is not None:
+                    node['end_index'] = next_start
         else:
             node['nodes'] = post_processing(valid_node_toc_items, node['end_index'])
-            node['end_index'] = valid_node_toc_items[0]['start_index'] if valid_node_toc_items else node['end_index']
+            if valid_node_toc_items:
+                next_start = (
+                    valid_node_toc_items[0].get('start_index')
+                    or valid_node_toc_items[0].get('physical_index')
+                )
+                if next_start is not None:
+                    node['end_index'] = next_start
         
     if 'nodes' in node and node['nodes']:
         tasks = [
@@ -1119,6 +1150,11 @@ def validate_and_truncate_physical_indices(toc_with_page_number, page_list_lengt
     Validates and truncates physical indices that exceed the actual document length.
     This prevents errors when TOC references pages that don't exist in the document (e.g. the file is broken or incomplete).
     """
+    if start_index is None:
+        if logger:
+            logger.info("validate_and_truncate_physical_indices received start_index=None, fallback to 1")
+        start_index = 1
+
     if not toc_with_page_number:
         return toc_with_page_number
     
