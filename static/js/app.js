@@ -9,16 +9,47 @@ let currentModelType = 'text';
 let useMemory = true;
 let isStreaming = false;
 
+// Node info cache
+let nodeMapCache = {};
+let allPagesCache = {};
+
+window.onerror = function(msg, url, line, col, error) {
+    console.error('Global JS Error:', msg, 'at', line, ':', col);
+    alert('JavaScript Error: ' + msg + ' at line ' + line);
+    return false;
+};
+
 // Initialize application
 document.addEventListener('DOMContentLoaded', () => {
-    initSocket();
-    loadDocuments();
-    loadConfig();
-    setupDragDrop();
-    setupEventListeners();
+    console.log('DOM Content Loaded, starting init...');
+    console.log('Marked library status:', typeof marked !== 'undefined' ? 'Loaded' : 'Missing');
+    
+    // Load documents first as it's most critical
+    try {
+        loadDocuments();
+        console.log('Documents loading started');
+    } catch (e) {
+        console.error('Document loading failed:', e);
+    }
+
+    try {
+        initSocket();
+        console.log('Socket initialized');
+    } catch (e) {
+        console.error('Socket init failed:', e);
+    }
+    
+    try {
+        loadConfig();
+        setupDragDrop();
+        setupEventListeners();
+        console.log('PageIndex App Initialized');
+    } catch (e) {
+        console.error('General initialization failed:', e);
+    }
 });
 
-// Setup additional event listeners
+// Setup event listeners
 function setupEventListeners() {
     // Model toggle buttons
     const textModelBtn = document.getElementById('textModelBtn');
@@ -26,25 +57,16 @@ function setupEventListeners() {
 
     if (textModelBtn) {
         textModelBtn.addEventListener('click', () => switchModel('text'));
-        console.log('textModelBtn listener added');
-    } else {
-        console.error('textModelBtn not found');
     }
 
     if (visionModelBtn) {
         visionModelBtn.addEventListener('click', () => switchModel('vision'));
-        console.log('visionModelBtn listener added');
-    } else {
-        console.error('visionModelBtn not found');
     }
 
     // Settings button
     const settingsBtn = document.getElementById('settingsBtn');
     if (settingsBtn) {
         settingsBtn.addEventListener('click', openSettingsModal);
-        console.log('settingsBtn listener added');
-    } else {
-        console.error('settingsBtn not found');
     }
 
     // Memory toggle
@@ -53,25 +75,19 @@ function setupEventListeners() {
         memoryToggle.addEventListener('change', (e) => toggleMemory(e.target.checked));
     }
 
-    // Upload area click
+    // Upload area
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     if (uploadArea && fileInput) {
-        uploadArea.addEventListener('click', () => {
-            console.log('Upload area clicked');
-            fileInput.click();
-        });
+        uploadArea.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', (e) => {
             if (e.target.files && e.target.files[0]) {
                 uploadDocument(e.target.files[0]);
             }
         });
-        console.log('uploadArea listener added');
-    } else {
-        console.error('uploadArea or fileInput not found');
     }
 
-    // Chat input and send button
+    // Chat input
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
     if (chatInput) {
@@ -84,257 +100,119 @@ function setupEventListeners() {
     // Save settings button
     const saveSettingsBtn = document.getElementById('saveSettingsBtn');
     if (saveSettingsBtn) {
-        saveSettingsBtn.addEventListener('click', () => {
-            if (window.saveSettings) {
-                window.saveSettings();
-            }
-        });
+        saveSettingsBtn.addEventListener('click', saveSettings);
     }
-
-    console.log('Event listeners setup complete');
 }
 
 // Initialize Socket.IO
 function initSocket() {
+    if (typeof io === 'undefined') {
+        console.error('Socket.IO (io) is not defined! Check CDN link.');
+        return;
+    }
     socket = io();
 
-    socket.on('connect', () => {
-        console.log('Connected to server');
-    });
-
-    socket.on('disconnect', () => {
-        console.log('Disconnected from server');
-    });
-
-    socket.on('connected', (data) => {
-        console.log('Socket connected:', data);
-    });
-
-    socket.on('status', (data) => {
-        updateStatus(data.status);
-    });
-
+    socket.on('connect', () => console.log('Connected to server'));
+    
+    socket.on('status', (data) => updateStatus(data.status));
+    
+    socket.on('thinking_chunk', (data) => appendToThinking(data.content));
+    
     socket.on('thinking', (data) => {
-        showThinking(data.content);
+        const box = document.getElementById('thinkingBox');
+        if (box) box.querySelector('.thinking-content').textContent = data.content;
     });
 
-    socket.on('thinking_chunk', (data) => {
-        appendToThinking(data.content);
-    });
+    socket.on('nodes', (data) => showNodes(data.nodes));
 
-    socket.on('nodes', (data) => {
-        showNodes(data.nodes);
-    });
-
-    socket.on('chunk', (data) => {
-        appendToResponse(data.content);
-    });
+    socket.on('chunk', (data) => appendToResponse(data.content));
 
     socket.on('response', (data) => {
-        setResponse(data.content);
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+        addUserMessage(data.content, 'assistant'); // Fallback for full sync response
     });
 
-    socket.on('done', () => {
-        finishResponse();
-    });
+    socket.on('done', () => finishResponse());
 
-    socket.on('error', (data) => {
-        showError(data.message);
-    });
+    socket.on('error', (data) => showError(data.message));
 
-    socket.on('history', (data) => {
-        displayHistory(data.history);
-    });
+    socket.on('history', (data) => displayHistory(data.history));
 
     socket.on('history_cleared', (data) => {
-        if (currentDocId === data.doc_id) {
-            clearChatDisplay();
-        }
+        if (currentDocId === data.doc_id) clearChatDisplay();
     });
 
-    socket.on('indexing_progress', (data) => {
-        handleIndexingProgress(data);
-    });
+    socket.on('indexing_progress', (data) => handleIndexingProgress(data));
 }
 
-// Handle indexing progress updates
-function handleIndexingProgress(data) {
-    const { doc_id, current, total, phase, detail } = data;
-    
-    // Update document list status if visible
-    const docItem = document.querySelector(`.doc-item[data-doc-id="${doc_id}"]`);
-    if (docItem) {
-        const statusText = docItem.querySelector('.doc-status');
-        if (statusText) {
-            const percent = total > 0 ? Math.round((current / total) * 100) : 0;
-            statusText.innerHTML = `
-                <span class="status-badge status-indexing"></span>
-                ${phase}: ${current}/${total} (${percent}%)
-            `;
-        }
-    }
+// ============= Document Management =============
 
-    // If this is the current document, show detailed progress in chat
-    if (currentDocId === doc_id) {
-        updateProgressMessage(data);
-    }
-}
-
-let lastProgressMessageId = null;
-
-function updateProgressMessage(data) {
-    const { current, total, phase, detail, results } = data;
-    const messagesContainer = document.getElementById('chatMessages');
-    
-    let progressDiv = document.getElementById('indexingProgressMessage');
-    
-    if (!progressDiv) {
-        hideEmptyState();
-        progressDiv = document.createElement('div');
-        progressDiv.id = 'indexingProgressMessage';
-        progressDiv.className = 'message message-assistant';
-        messagesContainer.appendChild(progressDiv);
-    }
-    
-    const percent = total > 0 ? Math.round((current / total) * 100) : 0;
-    
-    // We want to keep the details log, so we only update the header and current status
-    // but append to the details
-    
-    if (!progressDiv.innerHTML || progressDiv.innerHTML.indexOf('indexingDetails') === -1) {
-        progressDiv.innerHTML = `
-            <div class="message-content" style="background: #f0f9ff; border: 1px solid #bae6fd; color: #0369a1; width: 100%; max-width: 100%;">
-                <div id="indexingHeader" style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                </div>
-                <div class="progress" style="height: 10px; margin-bottom: 10px; background-color: #e0f2fe;">
-                    <div id="indexingProgressBar" class="progress-bar progress-bar-striped progress-bar-animated" 
-                         role="progressbar" style="width: 0%; background-color: #0ea5e9;"></div>
-                </div>
-                <div id="indexingStatus" style="font-size: 13px; color: #0c4a6e;">
-                </div>
-                <div id="indexingDetails" style="margin-top: 10px; max-height: 200px; overflow-y: auto; font-size: 12px; border-top: 1px solid #bae6fd; padding-top: 5px; display: flex; flex-direction: column-reverse;">
-                </div>
-            </div>
-        `;
-    }
-    
-    const header = progressDiv.querySelector('#indexingHeader');
-    const bar = progressDiv.querySelector('#indexingProgressBar');
-    const status = progressDiv.querySelector('#indexingStatus');
-    const detailsContainer = progressDiv.querySelector('#indexingDetails');
-    
-    header.innerHTML = `<strong><i class="bi bi-gear-fill"></i> 正在建立索引: ${phase}</strong><span>${current} / ${total} 页</span>`;
-    bar.style.width = `${percent}%`;
-    status.innerHTML = `<i class="bi bi-info-circle"></i> ${detail || '正在处理...'}`;
-    
-    if (detail) {
-        const logEntry = document.createElement('div');
-        logEntry.style.borderBottom = '1px solid #e0f2fe';
-        logEntry.style.padding = '4px 0';
-        
-        let resultHtml = '';
-        if (results && Array.isArray(results)) {
-            resultHtml = `<div style="margin-top: 4px;">${results.map(r => `<span class="badge bg-info text-dark" style="margin-right: 4px; font-weight: normal;">${r}</span>`).join('')}</div>`;
-        }
-        
-        logEntry.innerHTML = `
-            <span style="color: #64748b;">[${new Date().toLocaleTimeString()}]</span> 
-            <span style="font-weight: 500;">${phase}:</span> ${detail}
-            ${resultHtml}
-        `;
-        detailsContainer.appendChild(logEntry);
-        
-        // Auto-scroll the details container to the bottom (which is top in reverse layout)
-        detailsContainer.scrollTop = 0;
-    }
-    
-    scrollToBottom();
-}
-
-// Load documents list
 async function loadDocuments() {
     try {
+        console.log('Fetching documents...');
         const response = await fetch('/api/documents');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
+        console.log('Received documents:', data.documents);
         renderDocuments(data.documents);
     } catch (error) {
         console.error('Error loading documents:', error);
+        // Show error in the list container
+        const container = document.getElementById('documentList');
+        if (container) container.innerHTML = `<div style="color: #fca5a5; padding: 10px;">加载失败: ${error.message}</div>`;
     }
 }
 
-// Render documents list
 function renderDocuments(documents) {
+    console.log('Rendering documents:', documents);
     const container = document.getElementById('documentList');
+    if (!container) {
+        console.error('documentList container not found in DOM');
+        return;
+    }
 
-    if (documents.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">
-                <i class="bi bi-file-earmark" style="font-size: 32px;"></i>
-                <p style="margin-top: 10px;">暂无文档</p>
-            </div>
-        `;
+    if (!documents || !Array.isArray(documents) || documents.length === 0) {
+        console.log('No documents to render');
+        container.innerHTML = '<div style="text-align: center; padding: 20px; opacity: 0.5;">暂无文档</div>';
         return;
     }
 
     container.innerHTML = documents.map(doc => `
-        <div class="doc-item ${doc.doc_id === currentDocId ? 'active' : ''} ${doc.status === 'error' ? 'error' : ''}" 
-             data-doc-id="${doc.doc_id}">
+        <div class="doc-item ${doc.doc_id === currentDocId ? 'active' : ''}" data-doc-id="${doc.doc_id}">
             <div class="doc-name">${doc.filename}</div>
             <div class="doc-status">
                 <span class="status-badge status-${doc.status}"></span>
                 ${getStatusText(doc.status)}
-                ${doc.status === 'error' && doc.error_message ? `<span title="${doc.error_message}"><i class="bi bi-info-circle"></i></span>` : ''}
             </div>
             <div class="doc-actions">
-                ${doc.status === 'error' ? `
-                    <button class="doc-action-btn retry" onclick="event.stopPropagation(); retryUpload('${doc.doc_id}', '${doc.filename}')">
-                        <i class="bi bi-arrow-clockwise"></i> 重新上传
-                    </button>
-                ` : ''}
                 <button class="doc-action-btn delete" onclick="event.stopPropagation(); deleteDocument('${doc.doc_id}', '${doc.filename}')">
-                    <i class="bi bi-trash"></i> 删除
+                    <i class="bi bi-trash"></i>
                 </button>
             </div>
         </div>
     `).join('');
 
-    // Add click event listeners to document items
     container.querySelectorAll('.doc-item').forEach(item => {
         item.addEventListener('click', () => selectDocument(item.dataset.docId));
     });
 }
 
-// Get status text
 function getStatusText(status) {
-    const statusMap = {
-        'pending': '等待处理',
-        'indexing': '正在索引...',
-        'indexed': '索引完成',
-        'ready': '就绪',
-        'error': '错误'
-    };
-    return statusMap[status] || status;
+    const map = { 'pending': '等待', 'indexing': '索引中', 'indexed': '完成', 'ready': '就绪', 'error': '错误' };
+    return map[status] || status;
 }
 
-// Select document
 async function selectDocument(docId) {
     currentDocId = docId;
-
-    // Update UI
     document.querySelectorAll('.doc-item').forEach(item => {
-        item.classList.remove('active');
-        if (item.dataset.docId === docId) {
-            item.classList.add('active');
-        }
+        item.classList.toggle('active', item.dataset.docId === docId);
     });
-
-    // Clear chat and load history from server
     clearChatDisplay();
     socket.emit('get_history', { doc_id: docId });
     hideEmptyState();
 }
 
-// Upload document
 async function uploadDocument(file) {
     const filename = file.name.toLowerCase();
     if (!file || !(filename.endsWith('.pdf') || filename.endsWith('.md'))) {
@@ -346,367 +224,169 @@ async function uploadDocument(file) {
     formData.append('file', file);
 
     try {
-        const response = await fetch('/api/documents/upload', {
-            method: 'POST',
-            body: formData
-        });
-
+        const response = await fetch('/api/documents/upload', { method: 'POST', body: formData });
         const data = await response.json();
-
         if (data.success) {
             currentDocId = data.document.doc_id;
             loadDocuments();
-            hideEmptyState();
-            clearChatDisplay();
-
-            // Start polling for status
             pollDocumentStatus(data.document.doc_id);
         } else {
             alert('上传失败: ' + data.error);
         }
     } catch (error) {
-        console.error('Upload error:', error);
-        alert('上传失败');
+        alert('上传过程中发生错误');
     }
 }
 
-// Delete document
-async function deleteDocument(docId, filename) {
-    if (!confirm(`确定要删除文档 "${filename}" 吗？\n这将删除该文档及其所有对话历史。`)) {
-        return;
-    }
-
-    try {
-        const response = await fetch(`/api/documents/${docId}`, {
-            method: 'DELETE'
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // If the deleted document was selected, clear the chat
-            if (currentDocId === docId) {
-                currentDocId = null;
-                clearChatDisplay();
-            }
-            loadDocuments();
-            showNotification('文档已删除');
-        } else {
-            alert('删除失败: ' + data.error);
-        }
-    } catch (error) {
-        console.error('Delete error:', error);
-        alert('删除失败');
-    }
-}
-
-// Retry upload (for failed documents)
-function retryUpload(docId, filename) {
-    // First delete the failed document
-    deleteDocumentForRetry(docId, filename);
-}
-
-// Delete document and then trigger file picker for re-upload
-async function deleteDocumentForRetry(docId, filename) {
-    try {
-        const response = await fetch(`/api/documents/${docId}`, {
-            method: 'DELETE'
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Clear the current document if it was the failed one
-            if (currentDocId === docId) {
-                currentDocId = null;
-                clearChatDisplay();
-            }
-            loadDocuments();
-            
-            // Trigger file picker for re-upload
-            const fileInput = document.getElementById('fileInput');
-            if (fileInput) {
-                fileInput.click();
-            }
-        } else {
-            alert('删除失败: ' + data.error);
-        }
-    } catch (error) {
-        console.error('Delete error:', error);
-        alert('删除失败');
-    }
-}
-
-// Poll document status
 async function pollDocumentStatus(docId) {
-    const poll = async () => {
-        try {
-            const response = await fetch(`/api/documents/${docId}/status`);
-            const data = await response.json();
-
-            loadDocuments();
-
-            if (data.status === 'ready' || data.status === 'error') {
-                if (data.status === 'ready') {
-                    addSystemMessage('文档索引完成，可以开始对话了！');
-                    // Mark progress card as complete
-                    const pm = document.getElementById('indexingProgressMessage');
-                    if (pm) {
-                        pm.querySelector('#indexingHeader').innerHTML = `<strong><i class="bi bi-check-circle-fill"></i> 索引建立完成</strong>`;
-                        pm.querySelector('#indexingProgressBar').classList.remove('progress-bar-animated');
-                        pm.querySelector('#indexingProgressBar').style.backgroundColor = '#22c55e';
-                        pm.id = 'completedProgress'; // Change ID so it's not updated anymore
-                    }
-                } else {
-                    addSystemMessage('文档索引失败: ' + data.error_message);
-                }
-                return;
+    const interval = setInterval(async () => {
+        const res = await fetch(`/api/documents/${docId}/status`);
+        const data = await res.json();
+        loadDocuments();
+        if (data.status === 'ready' || data.status === 'error') {
+            clearInterval(interval);
+            if (data.status === 'ready') {
+                const pm = document.getElementById('indexingProgressMessage');
+                if (pm) pm.remove();
+                addSystemMessage('文档索引完成！');
             }
-
-            // Continue polling
-            setTimeout(poll, 2000);
-        } catch (error) {
-            console.error('Poll error:', error);
         }
-    };
-
-    setTimeout(poll, 1000);
+    }, 2000);
 }
 
-// Load configuration
-async function loadConfig() {
-    try {
-        const response = await fetch('/api/config/models');
-        const data = await response.json();
-
-        // Set text model config
-        const textConfig = data.models.text || {};
-        document.getElementById('textModelName').value = textConfig.name || '';
-        document.getElementById('textApiKey').value = textConfig.api_key || '';
-        document.getElementById('textBaseUrl').value = textConfig.base_url || '';
-
-        // Set vision model config
-        const visionConfig = data.models.vision || {};
-        document.getElementById('visionModelName').value = visionConfig.name || '';
-        document.getElementById('visionApiKey').value = visionConfig.api_key || '';
-        document.getElementById('visionBaseUrl').value = visionConfig.base_url || '';
-
-        // Set default model type
-        currentModelType = data.default_type || 'text';
-        updateModelToggle();
-    } catch (error) {
-        console.error('Error loading config:', error);
-    }
+async function deleteDocument(docId, filename) {
+    if (!confirm(`确定删除 ${filename}?`)) return;
+    await fetch(`/api/documents/${docId}`, { method: 'DELETE' });
+    if (currentDocId === docId) currentDocId = null;
+    loadDocuments();
+    clearChatDisplay();
 }
 
-// Switch model
-function switchModel(modelType) {
-    currentModelType = modelType;
-    updateModelToggle();
-    console.log('Model switched to:', modelType);
-}
+// ============= Chat Interaction =============
 
-// Update model toggle UI
-function updateModelToggle() {
-    const textBtn = document.getElementById('textModelBtn');
-    const visionBtn = document.getElementById('visionModelBtn');
-
-    if (currentModelType === 'text') {
-        textBtn.classList.add('active');
-        visionBtn.classList.remove('active');
-    } else {
-        textBtn.classList.remove('active');
-        visionBtn.classList.add('active');
-    }
-}
-
-// Toggle memory
-function toggleMemory(enabled) {
-    useMemory = enabled;
-}
-
-// Send message
 function sendMessage() {
     const input = document.getElementById('chatInput');
-    const message = input.value.trim();
+    const msg = input.value.trim();
+    if (!msg || isStreaming || !currentDocId) return;
 
-    if (!message || isStreaming) return;
-
-    if (!currentDocId) {
-        alert('请先选择或上传文档');
-        return;
-    }
-
-    // Check document status
-    const docItem = document.querySelector(`.doc-item[data-doc-id="${currentDocId}"]`);
-    if (docItem) {
-        const statusBadge = docItem.querySelector('.status-badge');
-        if (statusBadge && !statusBadge.classList.contains('status-ready')) {
-            alert('文档尚未准备就绪，请等待索引完成');
-            return;
-        }
-    }
-
-    // Add user message to chat
-    addUserMessage(message);
+    addUserMessage(msg);
     input.value = '';
-
-    // Show typing indicator
     showTypingIndicator();
-
-    // Send to server
     isStreaming = true;
     updateSendButton();
-
-    if (currentModelType === 'text') {
-        socket.emit('chat', {
-            doc_id: currentDocId,
-            query: message,
-            model_type: currentModelType,
-            use_memory: useMemory
-        });
-    } else {
-        socket.emit('chat_sync', {
-            doc_id: currentDocId,
-            query: message,
-            model_type: currentModelType,
-            use_memory: useMemory
-        });
-    }
+    
+    socket.emit(currentModelType === 'text' ? 'chat' : 'chat_sync', {
+        doc_id: currentDocId,
+        query: msg,
+        model_type: currentModelType,
+        use_memory: useMemory
+    });
 }
 
-// Handle key down
-function handleKeyDown(event) {
-    if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
+function handleKeyDown(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         sendMessage();
     }
 }
 
-// Update status display
-function updateStatus(status) {
-    const typingIndicator = document.getElementById('typingIndicator');
-    if (typingIndicator) {
-        const statusText = typingIndicator.querySelector('.status-text');
-        if (statusText) {
-            const statusMap = {
-                'preparing': '正在准备文档数据...',
-                'prepared': '准备完成',
-                'searching': '正在检索相关内容...',
-                'answering': '正在生成回答...'
-            };
-            statusText.textContent = statusMap[status] || '';
-        }
-    }
-}
-
-// Show thinking process
-function showThinking(content) {
-    const messagesContainer = document.getElementById('chatMessages');
-    const typingIndicator = document.getElementById('typingIndicator');
-
-    if (typingIndicator) {
-        // Create thinking box before typing indicator
-        const thinkingBox = document.createElement('div');
-        thinkingBox.className = 'thinking-box';
-        thinkingBox.id = 'thinkingBox';
-        thinkingBox.innerHTML = `<strong>推理过程</strong><span class="thinking-content">${content}</span>`;
-        typingIndicator.before(thinkingBox);
-    }
-}
-
-// Append to thinking (streaming)
 function appendToThinking(content) {
-    let thinkingBox = document.getElementById('thinkingBox');
-    
-    if (!thinkingBox) {
-        // Create thinking box if it doesn't exist
-        const typingIndicator = document.getElementById('typingIndicator');
+    let box = document.getElementById('thinkingBox');
+    if (!box) {
+        // Find existing nodes box or typing indicator to determine insertion point
+        const typing = document.getElementById('typingIndicator');
         const messagesContainer = document.getElementById('chatMessages');
         
-        thinkingBox = document.createElement('div');
-        thinkingBox.className = 'thinking-box';
-        thinkingBox.id = 'thinkingBox';
-        thinkingBox.innerHTML = `<strong>推理过程</strong><span class="thinking-content"></span>`;
+        box = document.createElement('div');
+        box.className = 'thinking-box';
+        box.id = 'thinkingBox';
+        box.innerHTML = '<strong>推理过程</strong><span class="thinking-content"></span>';
         
-        if (typingIndicator) {
-            typingIndicator.before(thinkingBox);
+        if (typing) {
+            typing.before(box);
         } else {
-            messagesContainer.appendChild(thinkingBox);
+            messagesContainer.appendChild(box);
         }
     }
-    
-    const thinkingContent = thinkingBox.querySelector('.thinking-content');
-    if (thinkingContent) {
-        thinkingContent.textContent += content;
-        scrollToBottom();
-    }
+    box.querySelector('.thinking-content').textContent += content;
+    scrollToBottom();
 }
 
-// Show nodes
 function showNodes(nodes) {
     const thinkingBox = document.getElementById('thinkingBox');
-    if (thinkingBox) {
-        const nodesHtml = `
-            <div class="nodes-box">
-                <strong>检索节点:</strong> ${nodes.map(n => `<span class="node-tag" data-node-id="${n}" onclick="showNodePreview('${n}')">${n}</span>`).join(' ')}
-            </div>
-        `;
-        thinkingBox.insertAdjacentHTML('afterend', nodesHtml);
-    }
+    const nodesHtml = `
+        <div class="nodes-box">
+            <strong>检索节点:</strong> ${nodes.map(n => `<span class="node-tag" onclick="showNodePreview('${n}')">${n}</span>`).join(' ')}
+        </div>
+    `;
+    if (thinkingBox) thinkingBox.insertAdjacentHTML('afterend', nodesHtml);
+    scrollToBottom();
 }
 
-// Node info cache
-let nodeMapCache = {};
-let allPagesCache = {};  // Cache all pages for each document
-
-// Show node preview (page image popup)
-async function showNodePreview(nodeId) {
-    if (!currentDocId) {
-        console.error('No document selected');
-        return;
-    }
-    
-    // Fetch node info if not cached
-    if (!nodeMapCache[currentDocId] || !allPagesCache[currentDocId]) {
-        try {
-            const response = await fetch(`/api/documents/${currentDocId}/node-info`);
-            const data = await response.json();
-            if (data.node_map) {
-                nodeMapCache[currentDocId] = data.node_map;
-                allPagesCache[currentDocId] = data.all_pages || [];
-            } else {
-                console.error('Failed to load node info:', data.error);
-                return;
-            }
-        } catch (error) {
-            console.error('Error fetching node info:', error);
-            return;
+function appendToResponse(content) {
+    let resp = document.getElementById('responseContent');
+    if (!resp) {
+        const typing = document.getElementById('typingIndicator');
+        const messagesContainer = document.getElementById('chatMessages');
+        
+        const div = document.createElement('div');
+        div.className = 'message message-assistant';
+        div.innerHTML = '<div class="message-content markdown-body" id="responseContent"></div>';
+        
+        if (typing) {
+            typing.before(div);
+        } else {
+            messagesContainer.appendChild(div);
         }
+        
+        resp = document.getElementById('responseContent');
     }
     
-    const nodeMap = nodeMapCache[currentDocId];
-    const allPages = allPagesCache[currentDocId];
-    const nodeInfo = nodeMap[nodeId];
+    const currentRaw = (resp.getAttribute('data-raw') || "") + content;
+    resp.setAttribute('data-raw', currentRaw);
     
-    if (!nodeInfo) {
-        console.warn('Node not found:', nodeId);
-        showNotification('未找到节点信息');
-        return;
-    }
-    
-    // Show preview modal with all pages and scroll to start_index
-    showPagePreviewModal(nodeId, nodeInfo, allPages);
+    resp.innerHTML = safeMarkedParse(currentRaw);
+    scrollToBottom();
 }
 
-// Show page preview modal
-function showPagePreviewModal(nodeId, nodeInfo, allPages) {
-    // Determine if it's a Markdown document
-    const activeDoc = document.querySelector(`.doc-item[data-doc-id="${currentDocId}"]`);
-    const filename = activeDoc ? activeDoc.querySelector('.doc-name').textContent.toLowerCase() : "";
-    const isMarkdown = filename.endsWith('.md');
+function finishResponse() {
+    isStreaming = false;
+    updateSendButton();
+    
+    // Remove ids to avoid conflicts with future messages
+    const resp = document.getElementById('responseContent');
+    if (resp) {
+        resp.removeAttribute('id');
+        resp.removeAttribute('data-raw');
+    }
+    
+    const think = document.getElementById('thinkingBox');
+    if (think) {
+        think.removeAttribute('id');
+    }
+    
+    const typing = document.getElementById('typingIndicator');
+    if (typing) {
+        typing.remove();
+    }
+}
 
-    // Create modal if not exists
+// ============= Preview Logic =============
+
+async function showNodePreview(nodeId) {
+    if (!nodeMapCache[currentDocId]) {
+        const res = await fetch(`/api/documents/${currentDocId}/node-info`);
+        const data = await res.json();
+        nodeMapCache[currentDocId] = data.node_map;
+        allPagesCache[currentDocId] = data.all_pages;
+    }
+
+    const info = nodeMapCache[currentDocId][nodeId];
+    if (!info) return;
+
+    const activeDoc = document.querySelector(`.doc-item[data-doc-id="${currentDocId}"]`);
+    const isMarkdown = activeDoc?.querySelector('.doc-name').textContent.toLowerCase().endsWith('.md');
+
     let modal = document.getElementById('pagePreviewModal');
     if (!modal) {
         modal = document.createElement('div');
@@ -714,549 +394,259 @@ function showPagePreviewModal(nodeId, nodeInfo, allPages) {
         modal.className = 'page-preview-modal';
         modal.innerHTML = `
             <div id="sidebarResizeHandle" class="resize-handle"></div>
-            <div class="page-preview-overlay" onclick="closePagePreviewModal()"></div>
-            <div class="page-preview-content">
-                <div class="page-preview-header">
-                    <h5 class="page-preview-title"></h5>
-                    <button class="page-preview-close" onclick="closePagePreviewModal()">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <div class="page-preview-body">
-                    <div class="page-preview-images"></div>
-                </div>
-                <div class="page-preview-footer">
-                    <div class="page-preview-nav">
-                        <button class="page-nav-btn" id="prevPageBtn" onclick="navigatePreviewPage(-1)">
-                            <i class="bi bi-chevron-left"></i> 上一页
-                        </button>
-                        <span class="page-indicator" id="pageIndicator"></span>
-                        <button class="page-nav-btn" id="nextPageBtn" onclick="navigatePreviewPage(1)">
-                            下一页 <i class="bi bi-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
+            <div class="page-preview-header">
+                <h5 class="page-preview-title"></h5>
+                <button class="btn-close" onclick="closePagePreviewModal()"></button>
+            </div>
+            <div class="page-preview-body"></div>
+            <div class="page-preview-footer" style="padding: 10px; border-top: 1px solid #eee; display: flex; justify-content: center; gap: 10px;">
+                <button class="btn btn-sm btn-outline-secondary" onclick="navigatePreviewPage(-1)">上一页</button>
+                <span id="pageIndicator"></span>
+                <button class="btn btn-sm btn-outline-secondary" onclick="navigatePreviewPage(1)">下一页</button>
             </div>
         `;
         document.body.appendChild(modal);
         initSidebarResizing();
     }
-    
-    // Update modal content
-    const titleEl = modal.querySelector('.page-preview-title');
-    const imagesEl = modal.querySelector('.page-preview-images');
-    const footerEl = modal.querySelector('.page-preview-footer');
-    
-    titleEl.textContent = `节点: ${nodeId}${nodeInfo.title ? ' - ' + nodeInfo.title : ''}`;
-    
+
+    modal.querySelector('.page-preview-title').textContent = `节点: ${nodeId} - ${info.title}`;
+    const body = modal.querySelector('.page-preview-body');
+    const footer = modal.querySelector('.page-preview-footer');
+
     if (isMarkdown) {
-        // For Markdown, show rendered markdown content
-        footerEl.style.display = 'none';
-        const renderedContent = nodeInfo.text ? marked.parse(nodeInfo.text) : '暂无详细文本内容';
-        imagesEl.innerHTML = `
-            <div class="markdown-preview-container" style="padding: 30px; background: white; width: 100%; max-width: 900px; margin: 0 auto;">
-                <div class="markdown-body">
-                    ${renderedContent}
-                </div>
+        footer.style.display = 'none';
+        const mdContent = info.text || '';
+        body.innerHTML = `<div class="markdown-body" style="padding: 20px;">${safeMarkedParse(mdContent)}</div>`;
+    } else {
+        footer.style.display = 'flex';
+        const pages = allPagesCache[currentDocId];
+        body.innerHTML = pages.map(p => `
+            <div class="page-img-container" data-page="${p.page}" style="margin-bottom: 10px; text-align: center;">
+                <img src="${p.url}" style="max-width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">第 ${p.page} 页</div>
             </div>
-        `;
-    } else {
-        // For PDF, show page images and enable navigation
-        footerEl.style.display = 'block';
-        if (!allPages || allPages.length === 0) {
-            imagesEl.innerHTML = '<div class="no-pages">无页面图片</div>';
-        } else {
-            imagesEl.innerHTML = allPages.map((p, idx) => `
-                <div class="page-image-container" data-page="${p.page}" data-index="${idx}">
-                    <img src="${p.url}" alt="Page ${p.page}" class="page-preview-image" onclick="openFullscreenImage('${p.url}')">
-                    <div class="page-number">第 ${p.page} 页</div>
-                </div>
-            `).join('');
-        }
+        `).join('');
         
-        // Store current pages for navigation
-        modal.dataset.pages = JSON.stringify(allPages);
-        
-        // Calculate initial index based on start_index
-        const startIndex = nodeInfo.start_index || 1;
-        const initialIndex = Math.max(0, Math.min(startIndex - 1, allPages.length - 1));
-        modal.dataset.currentIndex = initialIndex;
-        
-        // Update navigation
+        modal.dataset.pages = JSON.stringify(pages);
+        modal.dataset.currentIndex = (info.start_index || 1) - 1;
         updatePreviewNavigation();
-    }
-    
-    // Show modal
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    const mainContent = document.querySelector('.main-content');
-    if (mainContent) {
-        mainContent.classList.add('preview-open');
-        mainContent.style.marginRight = getComputedStyle(modal).width;
-    }
-    
-    // Scroll to position if PDF
-    if (!isMarkdown) {
-        const initialIndex = parseInt(modal.dataset.currentIndex) || 0;
+        
         setTimeout(() => {
-            const containers = modal.querySelectorAll('.page-image-container');
-            if (containers[initialIndex]) {
-                containers[initialIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+            const target = body.querySelectorAll('.page-img-container')[modal.dataset.currentIndex];
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
-    } else {
-        // Scroll to top for Markdown
-        imagesEl.scrollTop = 0;
     }
+
+    modal.classList.add('active');
+    document.querySelector('.main-content').classList.add('preview-open');
+    document.querySelector('.main-content').style.marginRight = getComputedStyle(modal).width;
 }
 
-// Close page preview modal
 function closePagePreviewModal() {
     const modal = document.getElementById('pagePreviewModal');
-    if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        // Remove preview-open class and reset margin
-        const mainContent = document.querySelector('.main-content');
-        if (mainContent) {
-            mainContent.classList.remove('preview-open');
-            mainContent.style.marginRight = '';
-        }
-    }
+    if (modal) modal.classList.remove('active');
+    const main = document.querySelector('.main-content');
+    if (main) { main.classList.remove('preview-open'); main.style.marginRight = ''; }
 }
 
-// Navigate preview pages
-function navigatePreviewPage(direction) {
+function navigatePreviewPage(dir) {
     const modal = document.getElementById('pagePreviewModal');
-    if (!modal) return;
-    
-    const pages = JSON.parse(modal.dataset.pages || '[]');
-    let currentIndex = parseInt(modal.dataset.currentIndex) || 0;
-    
-    currentIndex += direction;
-    if (currentIndex < 0) currentIndex = 0;
-    if (currentIndex >= pages.length) currentIndex = pages.length - 1;
-    
-    modal.dataset.currentIndex = currentIndex;
-    
-    // Scroll to page
-    const containers = modal.querySelectorAll('.page-image-container');
-    if (containers[currentIndex]) {
-        containers[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const pages = JSON.parse(modal.dataset.pages);
+    let idx = parseInt(modal.dataset.currentIndex) + dir;
+    if (idx >= 0 && idx < pages.length) {
+        modal.dataset.currentIndex = idx;
+        const target = modal.querySelector(`.page-img-container[data-page="${pages[idx].page}"]`);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        updatePreviewNavigation();
     }
-    
-    updatePreviewNavigation();
 }
 
-// Update preview navigation state
 function updatePreviewNavigation() {
     const modal = document.getElementById('pagePreviewModal');
-    if (!modal) return;
-    
-    const pages = JSON.parse(modal.dataset.pages || '[]');
-    const currentIndex = parseInt(modal.dataset.currentIndex) || 0;
-    const indicator = document.getElementById('pageIndicator');
-    const prevBtn = document.getElementById('prevPageBtn');
-    const nextBtn = document.getElementById('nextPageBtn');
-    
-    if (pages.length > 0) {
-        indicator.textContent = `${currentIndex + 1} / ${pages.length}`;
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === pages.length - 1;
-    } else {
-        indicator.textContent = '0 / 0';
-        prevBtn.disabled = true;
-        nextBtn.disabled = true;
-    }
+    const pages = JSON.parse(modal.dataset.pages);
+    const idx = parseInt(modal.dataset.currentIndex);
+    document.getElementById('pageIndicator').textContent = `${idx + 1} / ${pages.length}`;
 }
 
-// Open image in fullscreen
-function openFullscreenImage(url) {
-    const overlay = document.createElement('div');
-    overlay.className = 'fullscreen-image-overlay';
-    overlay.onclick = () => overlay.remove();
-    overlay.innerHTML = `
-        <img src="${url}" class="fullscreen-image">
-        <button class="fullscreen-close" onclick="this.parentElement.remove()">
-            <i class="bi bi-x-lg"></i>
-        </button>
-    `;
-    document.body.appendChild(overlay);
+// ============= Settings & UI Helpers =============
+
+async function loadConfig() {
+    const res = await fetch('/api/config/models');
+    const data = await res.json();
+    const t = data.models.text || {};
+    const v = data.models.vision || {};
+    document.getElementById('textModelName').value = t.name || '';
+    document.getElementById('textApiKey').value = t.api_key || '';
+    document.getElementById('textBaseUrl').value = t.base_url || '';
+    document.getElementById('visionModelName').value = v.name || '';
+    document.getElementById('visionApiKey').value = v.api_key || '';
+    document.getElementById('visionBaseUrl').value = v.base_url || '';
 }
 
-// Append to response (streaming)
-function appendToResponse(content) {
-    // Check if response content element already exists
-    let responseContent = document.getElementById('responseContent');
-
-    if (!responseContent) {
-        // Remove typing indicator
-        const typingIndicator = document.getElementById('typingIndicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
-        }
-
-        // Create response box with id for future reference
-        const messagesContainer = document.getElementById('chatMessages');
-        const responseBox = document.createElement('div');
-        responseBox.className = 'message message-assistant';
-        responseBox.id = 'responseBox';
-        responseBox.innerHTML = `
-            <div class="message-content" id="responseContent"></div>
-        `;
-        messagesContainer.appendChild(responseBox);
-        
-        responseContent = document.getElementById('responseContent');
-    }
-
-    if (responseContent) {
-        responseContent.textContent += content;
-        scrollToBottom();
-    }
+async function saveSettings() {
+    const configs = {
+        text: { name: document.getElementById('textModelName').value, api_key: document.getElementById('textApiKey').value, base_url: document.getElementById('textBaseUrl').value, type: 'text' },
+        vision: { name: document.getElementById('visionModelName').value, api_key: document.getElementById('visionApiKey').value, base_url: document.getElementById('visionBaseUrl').value, type: 'vision' }
+    };
+    await fetch('/api/config/models/text', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(configs.text) });
+    await fetch('/api/config/models/vision', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(configs.vision) });
+    bootstrap.Modal.getInstance(document.getElementById('settingsModal')).hide();
+    showNotification('配置已保存');
 }
 
-// Set response (non-streaming)
-function setResponse(content) {
-    const typingIndicator = document.getElementById('typingIndicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
+function handleIndexingProgress(data) {
+    const { doc_id, current, total, phase, detail } = data;
+    const item = document.querySelector(`.doc-item[data-doc-id="${doc_id}"]`);
+    if (item) {
+        const percent = total > 0 ? Math.round((current / total) * 100) : 0;
+        item.querySelector('.doc-status').innerHTML = `<span class="status-badge status-indexing"></span> ${phase}: ${percent}%`;
     }
-
-    const messagesContainer = document.getElementById('chatMessages');
-    const responseBox = document.createElement('div');
-    responseBox.className = 'message message-assistant';
-    responseBox.innerHTML = `<div class="message-content">${escapeHtml(content)}</div>`;
-    messagesContainer.appendChild(responseBox);
-
-    scrollToBottom();
+    if (currentDocId === doc_id) updateProgressCard(data);
 }
 
-// Finish response
-function finishResponse() {
-    isStreaming = false;
-    updateSendButton();
-
-    // Remove typing indicator only (keep thinking box)
-    const typingIndicator = document.getElementById('typingIndicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
+function updateProgressCard(data) {
+    let card = document.getElementById('indexingProgressMessage');
+    if (!card) {
+        hideEmptyState();
+        card = document.createElement('div');
+        card.id = 'indexingProgressMessage';
+        card.className = 'message message-assistant';
+        document.getElementById('chatMessages').appendChild(card);
     }
-    
-    // Remove the id from responseBox so next message creates a new one
-    const responseBox = document.getElementById('responseBox');
-    if (responseBox) {
-        responseBox.removeAttribute('id');
-    }
-    const responseContent = document.getElementById('responseContent');
-    if (responseContent) {
-        responseContent.removeAttribute('id');
-    }
-    
-    // Remove the id from thinkingBox so next message creates a new one
-    const thinkingBox = document.getElementById('thinkingBox');
-    if (thinkingBox) {
-        thinkingBox.removeAttribute('id');
-    }
-}
-
-// Show error
-function showError(message) {
-    isStreaming = false;
-    updateSendButton();
-
-    const typingIndicator = document.getElementById('typingIndicator');
-    if (typingIndicator) {
-        typingIndicator.remove();
-    }
-
-    addSystemMessage('错误: ' + message);
-}
-
-// Add user message
-function addUserMessage(content) {
-    hideEmptyState();
-
-    const messagesContainer = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message message-user';
-    messageDiv.innerHTML = `<div class="message-content">${escapeHtml(content)}</div>`;
-    messagesContainer.appendChild(messageDiv);
-
-    scrollToBottom();
-}
-
-// Add system message
-function addSystemMessage(content) {
-    const messagesContainer = document.getElementById('chatMessages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message message-assistant';
-    messageDiv.innerHTML = `
-        <div class="message-content" style="background: #fef3c7; color: #92400e;">
-            <i class="bi bi-info-circle"></i> ${content}
+    const percent = data.total > 0 ? Math.round((data.current / data.total) * 100) : 0;
+    card.innerHTML = `
+        <div class="message-content" style="background: #f0f9ff; border: 1px solid #bae6fd; color: #0369a1; width: 100%;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <strong><i class="bi bi-gear-fill"></i> ${data.phase}</strong>
+                <span>${data.current}/${data.total}</span>
+            </div>
+            <div class="progress" style="height: 6px; background: #e0f2fe; border-radius: 3px; overflow: hidden;">
+                <div class="progress-bar" style="width: ${percent}%; background: #0ea5e9; height: 100%;"></div>
+            </div>
+            <div style="font-size: 12px; margin-top: 5px; opacity: 0.8;">${data.detail || ''}</div>
         </div>
     `;
-    messagesContainer.appendChild(messageDiv);
-
     scrollToBottom();
-}
-
-// Show typing indicator
-function showTypingIndicator() {
-    const messagesContainer = document.getElementById('chatMessages');
-    const indicator = document.createElement('div');
-    indicator.className = 'typing-indicator';
-    indicator.id = 'typingIndicator';
-    indicator.innerHTML = `
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="typing-dot"></span>
-        <span class="status-text" style="margin-left: 10px; font-size: 14px; color: #64748b;"></span>
-    `;
-    messagesContainer.appendChild(indicator);
-    scrollToBottom();
-}
-
-// Update send button state
-function updateSendButton() {
-    const btn = document.getElementById('sendBtn');
-    btn.disabled = isStreaming;
 }
 
 // Display chat history
 function displayHistory(history) {
-    if (!history || history.length === 0) return;
-
-    hideEmptyState();
-
-    const messagesContainer = document.getElementById('chatMessages');
-    messagesContainer.innerHTML = '';
-
+    console.log('Displaying history:', history);
+    if (!history) return;
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
     history.forEach(msg => {
-        // Add thinking box if present (before assistant message)
         if (msg.thinking) {
-            const thinkingBox = document.createElement('div');
-            thinkingBox.className = 'thinking-box';
-            thinkingBox.innerHTML = `<strong>推理过程</strong><span class="thinking-content">${escapeHtml(msg.thinking)}</span>`;
-            messagesContainer.appendChild(thinkingBox);
+            const t = document.createElement('div');
+            t.className = 'thinking-box';
+            t.innerHTML = `<strong>推理过程</strong><span class="thinking-content">${escapeHtml(msg.thinking)}</span>`;
+            container.appendChild(t);
         }
-        
-        // Add nodes box if present (before assistant message)
         if (msg.nodes && msg.nodes.length > 0) {
-            const nodesBox = document.createElement('div');
-            nodesBox.className = 'nodes-box';
-            nodesBox.innerHTML = `<strong>检索节点:</strong> ${msg.nodes.map(n => `<span class="node-tag" data-node-id="${n}" onclick="showNodePreview('${n}')">${n}</span>`).join(' ')}`;
-            messagesContainer.appendChild(nodesBox);
+            const n = document.createElement('div');
+            n.className = 'nodes-box';
+            n.innerHTML = `<strong>检索节点:</strong> ${msg.nodes.map(node => `<span class="node-tag" onclick="showNodePreview('${node}')">${node}</span>`).join(' ')}`;
+            container.appendChild(n);
         }
-        
-        // Add message
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message message-${msg.role}`;
-        messageDiv.innerHTML = `<div class="message-content">${escapeHtml(msg.content)}</div>`;
-        messagesContainer.appendChild(messageDiv);
+        addUserMessage(msg.content, msg.role);
     });
-
     scrollToBottom();
 }
 
-// Clear chat display
-function clearChatDisplay() {
-    const messagesContainer = document.getElementById('chatMessages');
-    messagesContainer.innerHTML = `
-        <div class="empty-state" id="emptyState">
-            <i class="bi bi-chat-dots"></i>
-            <h5>开始对话</h5>
-            <p>输入问题开始与文档对话</p>
-        </div>
-    `;
-}
-
-// Hide empty state
-function hideEmptyState() {
-    const emptyState = document.getElementById('emptyState');
-    if (emptyState) {
-        emptyState.remove();
-    }
-}
-
-// Open settings modal
-function openSettingsModal() {
-    const modalEl = document.getElementById('settingsModal');
-    if (modalEl) {
-        const modal = new bootstrap.Modal(modalEl);
-        modal.show();
-    } else {
-        console.error('Settings modal not found');
-    }
-}
-
-// Save settings - make it global
-window.saveSettings = async function () {
-    const textConfig = {
-        name: document.getElementById('textModelName').value,
-        api_key: document.getElementById('textApiKey').value,
-        base_url: document.getElementById('textBaseUrl').value,
-        type: 'text'
-    };
-
-    const visionConfig = {
-        name: document.getElementById('visionModelName').value,
-        api_key: document.getElementById('visionApiKey').value,
-        base_url: document.getElementById('visionBaseUrl').value,
-        type: 'vision'
-    };
-
+function safeMarkedParse(content) {
+    if (typeof marked === 'undefined') return content;
     try {
-        await fetch('/api/config/models/text', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(textConfig)
-        });
-
-        await fetch('/api/config/models/vision', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(visionConfig)
-        });
-
-        const modalEl = document.getElementById('settingsModal');
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        if (modal) {
-            modal.hide();
+        if (typeof marked.parse === 'function') {
+            return marked.parse(content);
+        } else if (typeof marked === 'function') {
+            return marked(content);
         }
-        showNotification('配置已保存');
-    } catch (error) {
-        console.error('Error saving config:', error);
-        alert('保存配置失败');
+    } catch (e) {
+        console.error('Marked parse error:', e);
     }
-};
-
-// Setup drag and drop
-function setupDragDrop() {
-    const uploadArea = document.getElementById('uploadArea');
-
-    if (!uploadArea) {
-        console.error('Upload area not found for drag drop setup');
-        return;
-    }
-
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        uploadArea.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        uploadArea.addEventListener(eventName, () => {
-            uploadArea.style.borderColor = 'white';
-            uploadArea.style.background = 'rgba(255,255,255,0.1)';
-        });
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        uploadArea.addEventListener(eventName, () => {
-            uploadArea.style.borderColor = 'rgba(255,255,255,0.3)';
-            uploadArea.style.background = 'transparent';
-        });
-    });
-
-    uploadArea.addEventListener('drop', (e) => {
-        const file = e.dataTransfer.files[0];
-        uploadDocument(file);
-    });
-
-    console.log('Drag drop setup complete');
+    return content;
 }
 
-// Scroll to bottom
-function scrollToBottom() {
-    const container = document.getElementById('chatContainer');
-    container.scrollTop = container.scrollHeight;
-}
-
-// Escape HTML
-function escapeHtml(text) {
+function addUserMessage(content, role = 'user') {
+    hideEmptyState();
     const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    div.className = `message message-${role}`;
+    const bodyClass = role === 'assistant' ? 'markdown-body' : '';
+    
+    let bodyContent = role === 'assistant' ? safeMarkedParse(content) : escapeHtml(content);
+    
+    div.innerHTML = `<div class="message-content ${bodyClass}">${bodyContent}</div>`;
+    document.getElementById('chatMessages').appendChild(div);
+    scrollToBottom();
 }
 
-// Show notification
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #22c55e;
-        color: white;
-        padding: 12px 24px;
-        border-radius: 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        z-index: 9999;
-        animation: slideIn 0.3s ease;
-    `;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 2000);
+function addSystemMessage(msg) {
+    const div = document.createElement('div');
+    div.className = 'message message-assistant';
+    div.innerHTML = `<div class="message-content" style="background: #fef3c7; color: #92400e;">${msg}</div>`;
+    document.getElementById('chatMessages').appendChild(div);
+    scrollToBottom();
 }
 
-// Add animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
+function showTypingIndicator() {
+    const div = document.createElement('div');
+    div.className = 'typing-indicator';
+    div.id = 'typingIndicator';
+    div.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span><span class="status-text" style="margin-left:10px"></span>';
+    document.getElementById('chatMessages').appendChild(div);
+    scrollToBottom();
+}
 
-// Sidebar resizing logic
+function updateStatus(status) {
+    const el = document.querySelector('#typingIndicator .status-text');
+    if (el) {
+        const map = { 'preparing': '准备数据...', 'searching': '检索树中...', 'answering': '生成回答...' };
+        el.textContent = map[status] || '';
+    }
+}
+
+function updateSendButton() { document.getElementById('sendBtn').disabled = isStreaming; }
+
+function clearChatDisplay() {
+    document.getElementById('chatMessages').innerHTML = '<div class="empty-state" id="emptyState"><i class="bi bi-chat-dots"></i><h5>开始对话</h5><p>输入问题开始问答</p></div>';
+}
+
+function hideEmptyState() { const el = document.getElementById('emptyState'); if (el) el.remove(); }
+
+function openSettingsModal() { new bootstrap.Modal(document.getElementById('settingsModal')).show(); }
+
+function scrollToBottom() { const el = document.getElementById('chatContainer'); el.scrollTop = el.scrollHeight; }
+
+function escapeHtml(text) { const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+
+function showNotification(msg) {
+    const n = document.createElement('div');
+    n.style.cssText = 'position:fixed;top:20px;right:20px;background:#22c55e;color:white;padding:12px 24px;border-radius:10px;z-index:9999;box-shadow:0 4px 15px rgba(0,0,0,0.2);';
+    n.textContent = msg;
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 2000);
+}
+
+function setupDragDrop() {
+    const area = document.getElementById('uploadArea');
+    if (!area) return;
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(e => area.addEventListener(e, (ev) => { ev.preventDefault(); ev.stopPropagation(); }));
+    area.addEventListener('drop', (ev) => uploadDocument(ev.dataTransfer.files[0]));
+}
+
 function initSidebarResizing() {
     const modal = document.getElementById('pagePreviewModal');
     const handle = document.getElementById('sidebarResizeHandle');
-    if (!modal || !handle) return;
-
     let isResizing = false;
-
-    handle.addEventListener('mousedown', (e) => {
-        isResizing = true;
-        document.body.style.cursor = 'ew-resize';
-        document.body.style.userSelect = 'none';
-        handle.classList.add('resizing');
-        e.preventDefault();
-    });
-
+    handle.addEventListener('mousedown', (e) => { isResizing = true; document.body.style.cursor = 'ew-resize'; e.preventDefault(); });
     document.addEventListener('mousemove', (e) => {
         if (!isResizing) return;
-        
-        const newWidth = window.innerWidth - e.clientX;
-        if (newWidth > 300 && newWidth < window.innerWidth * 0.9) {
-            modal.style.width = `${newWidth}px`;
-            // Update main content margin dynamically
-            const mainContent = document.querySelector('.main-content');
-            if (mainContent && mainContent.classList.contains('preview-open')) {
-                mainContent.style.marginRight = `${newWidth}px`;
-            }
+        const w = window.innerWidth - e.clientX;
+        if (w > 300 && w < window.innerWidth * 0.9) {
+            modal.style.width = `${w}px`;
+            const main = document.querySelector('.main-content');
+            if (main?.classList.contains('preview-open')) main.style.marginRight = `${w}px`;
         }
     });
-
-    document.addEventListener('mouseup', () => {
-        if (isResizing) {
-            isResizing = false;
-            document.body.style.cursor = '';
-            document.body.style.userSelect = '';
-            handle.classList.remove('resizing');
-        }
-    });
+    document.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = ''; });
 }
