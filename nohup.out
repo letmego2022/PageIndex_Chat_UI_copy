@@ -1,0 +1,795 @@
+Scanning results directory to recover documents...
+Recovered document: CLPS-LC-024.6.1722222.pdf (id: 20260317_151935_6fb7, status: ready)
+Recovered document: CLPS-LC-_2024.6.17.pdf (id: 20260316_055354_251d, status: ready)
+Total documents recovered: 2
+2026-03-18 09:42:46,168 - __main__ - INFO - Starting PageIndex Chat UI server...
+2026-03-18 09:42:46,169 - werkzeug - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Serving Flask app 'app'
+ * Debug mode: on
+2026-03-18 09:42:46,187 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://172.24.0.2:8001
+2026-03-18 09:42:46,187 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-03-18 09:42:46,187 - werkzeug - INFO -  * Restarting with stat
+Scanning results directory to recover documents...
+Recovered document: CLPS-LC-024.6.1722222.pdf (id: 20260317_151935_6fb7, status: ready)
+Recovered document: CLPS-LC-_2024.6.17.pdf (id: 20260316_055354_251d, status: ready)
+Total documents recovered: 2
+2026-03-18 09:42:47,617 - __main__ - INFO - Starting PageIndex Chat UI server...
+2026-03-18 09:42:47,617 - werkzeug - WARNING - Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+2026-03-18 09:42:47,634 - werkzeug - WARNING -  * Debugger is active!
+2026-03-18 09:42:47,634 - werkzeug - INFO -  * Debugger PIN: 285-805-070
+2026-03-18 09:42:49,572 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-18 09:42:49,634 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-18 09:42:49,725 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:42:49,727 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "GET /socket.io/?EIO=4&transport=polling&t=Pq0Kv0r HTTP/1.1" 200 -
+2026-03-18 09:42:49,730 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "GET /api/config/models HTTP/1.1" 200 -
+2026-03-18 09:42:49,822 - routes.socket_handlers - INFO - Client connected: trHpdDkE5l2e0bBXAAAB
+2026-03-18 09:42:49,823 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "POST /socket.io/?EIO=4&transport=polling&t=Pq0Kv2X&sid=uJL7LPpO6KP0ozRxAAAA HTTP/1.1" 200 -
+2026-03-18 09:42:49,826 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "GET /socket.io/?EIO=4&transport=polling&t=Pq0Kv2X.0&sid=uJL7LPpO6KP0ozRxAAAA HTTP/1.1" 200 -
+2026-03-18 09:42:49,913 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:42:49] "GET /socket.io/?EIO=4&transport=polling&t=Pq0Kv3-&sid=uJL7LPpO6KP0ozRxAAAA HTTP/1.1" 200 -
+2026-03-18 09:44:48,555 - routes.socket_handlers - INFO - Client disconnected: trHpdDkE5l2e0bBXAAAB
+2026-03-18 09:44:48,556 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "GET /socket.io/?EIO=4&transport=websocket&sid=uJL7LPpO6KP0ozRxAAAA HTTP/1.1" 200 -
+2026-03-18 09:44:48,611 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-18 09:44:48,681 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-18 09:44:48,774 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "GET /socket.io/?EIO=4&transport=polling&t=Pq0LM4- HTTP/1.1" 200 -
+2026-03-18 09:44:48,779 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:44:48,782 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "GET /api/config/models HTTP/1.1" 200 -
+2026-03-18 09:44:48,888 - routes.socket_handlers - INFO - Client connected: WHWBrfaaw2gQUucLAAAD
+2026-03-18 09:44:48,889 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "POST /socket.io/?EIO=4&transport=polling&t=Pq0LM6Y&sid=MHlf1zZjbgTXfqIxAAAC HTTP/1.1" 200 -
+2026-03-18 09:44:48,897 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:48] "GET /socket.io/?EIO=4&transport=polling&t=Pq0LM6Z&sid=MHlf1zZjbgTXfqIxAAAC HTTP/1.1" 200 -
+2026-03-18 09:44:49,031 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:44:49] "GET /socket.io/?EIO=4&transport=polling&t=Pq0LM8d&sid=MHlf1zZjbgTXfqIxAAAC HTTP/1.1" 200 -
+2026-03-18 09:45:07,835 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:07] "POST /api/documents/upload HTTP/1.1" 200 -
+2026-03-18 09:45:07,837 - services.indexing_service - INFO - Using model: Qwen/Qwen3.5-35B-A3B, base_url: http://172.30.119.101:9998/v1
+2026-03-18 09:45:07,841 - services.indexing_service - INFO - Starting indexing for /workspace/page2/uploads/20260318_094507_7915_pageId_437635529.md
+Parsing Markdown...
+{"timestamp": "2026-03-18 09:45:07", "level": "PROGRESS", "message": "Phase: 准备页面, 0/100", "doc_id": "20260318_094507_7915", "current": 0, "total": 100, "phase": "准备页面", "detail": "正在读取 Markdown 文件..."}
+{"timestamp": "2026-03-18 09:45:07", "level": "PROGRESS", "message": "Phase: 准备页面, 10/100", "doc_id": "20260318_094507_7915", "current": 10, "total": 100, "phase": "准备页面", "detail": "文件读取完成，共有 109 个段落，开始计算 Token..."}
+{"timestamp": "2026-03-18 09:45:07", "level": "PROGRESS", "message": "Phase: 准备页面, 10/100", "doc_id": "20260318_094507_7915", "current": 10, "total": 100, "phase": "准备页面", "detail": "正在分析段落 1/109..."}
+2026-03-18 09:45:07,961 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:07] "GET /api/documents HTTP/1.1" 200 -
+{"timestamp": "2026-03-18 09:45:08", "level": "PROGRESS", "message": "Phase: 准备页面, 46/100", "doc_id": "20260318_094507_7915", "current": 46, "total": 100, "phase": "准备页面", "detail": "正在分析段落 51/109..."}
+{"timestamp": "2026-03-18 09:45:08", "level": "PROGRESS", "message": "Phase: 准备页面, 83/100", "doc_id": "20260318_094507_7915", "current": 83, "total": 100, "phase": "准备页面", "detail": "正在分析段落 101/109..."}
+{"timestamp": "2026-03-18 09:45:08", "level": "PROGRESS", "message": "Phase: 准备页面, 100/100", "doc_id": "20260318_094507_7915", "current": 100, "total": 100, "phase": "准备页面", "detail": "文档解析完成，共生成 4 个虚拟页面"}
+{"timestamp": "2026-03-18 09:45:08", "level": "INFO", "message": {"total_page_number": 4}, "doc_id": "20260318_094507_7915"}
+{"timestamp": "2026-03-18 09:45:08", "level": "INFO", "message": {"total_token": 3333}, "doc_id": "20260318_094507_7915"}
+{"timestamp": "2026-03-18 09:45:08", "level": "PROGRESS", "message": "Phase: 初始化, 0/4", "doc_id": "20260318_094507_7915", "current": 0, "total": 4, "phase": "初始化", "detail": "正在准备页面内容"}
+start find_toc_pages
+2026-03-18 09:45:08,934 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:08] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:09,032 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:11,029 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:11] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:11,118 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:11] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:13,119 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:13] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:13,224 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:13] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:15,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:15,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:17,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:17,607 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:19,605 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:19] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:19,704 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:19] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:20,987 - httpx - INFO - HTTP Request: POST http://172.30.119.101:9998/v1/chat/completions "HTTP/1.1 200 OK"
+response 
+
+{
+    "thinking": "The text contains structured section headers (e.g., # 1. System Overview, # 2. Functions) and several data tables (Amendment history, Service Charge, etc.), but there is no specific section or list explicitly serving as a Table of Contents. A Table of Contents typically summarizes the document structure at the beginning with page numbers or links, whereas this text presents the content directly without such a summary list.",
+    "toc_detected": "no"
+}
+2026-03-18 09:45:21,703 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:21,791 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:24,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:24,512 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:26,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:26] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:26,602 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:26] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:28,496 - httpx - INFO - HTTP Request: POST http://172.30.119.101:9998/v1/chat/completions "HTTP/1.1 200 OK"
+response 
+
+{
+    "thinking": "The provided text contains technical documentation including screen descriptions and data field specification tables. However, it does not contain a list of document sections, chapters, or pages that would constitute a Table of Contents. The tables present are data dictionaries (Field ID, Field Name, etc.), which are explicitly excluded by the instruction ('table list, etc. are not table of contents').",
+    "toc_detected": "no"
+}
+2026-03-18 09:45:28,613 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:28,705 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:30,712 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:30,810 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:32,823 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:32,936 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:34,918 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:34] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:35,014 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:37,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:37] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:37,517 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:37] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:40,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:40] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:40,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:40] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:42,389 - httpx - INFO - HTTP Request: POST http://172.30.119.101:9998/v1/chat/completions "HTTP/1.1 200 OK"
+response 
+
+{
+    "thinking": "The text contains the actual content of a document, including section headers like '# 3. User Interface' and '# 4. Reports/Advices' followed by detailed tables and rules. A Table of Contents typically appears at the beginning of a document and lists the sections with page numbers or links as a navigational index. This text presents the information within those sections rather than a summary list of them.",
+    "toc_detected": "no"
+}
+2026-03-18 09:45:43,449 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:43,536 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:46,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:46] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:46,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:46] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:49,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:49,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:52,419 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:52] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:52,510 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:52] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:54,320 - httpx - INFO - HTTP Request: POST http://172.30.119.101:9998/v1/chat/completions "HTTP/1.1 200 OK"
+response 
+
+{
+    "thinking": "The text contains section headers and data tables, but lacks a structured list of document sections or chapters typically found at the beginning of a document to serve as a Table of Contents. The headers present (# 7, # 8) are part of the body content rather than a navigational index.",
+    "toc_detected": "no"
+}
+no toc found
+{"timestamp": "2026-03-18 09:45:54", "level": "INFO", "message": {"toc_content": null, "toc_page_list": [], "page_index_given_in_toc": "no"}, "doc_id": "20260318_094507_7915"}
+process_no_toc
+start_index: 1
+{"timestamp": "2026-03-18 09:45:54", "level": "PROGRESS", "message": "Phase: 构建索引, 1/4", "doc_id": "20260318_094507_7915", "current": 1, "total": 4, "phase": "构建索引", "detail": "准备第 1 页文本"}
+{"timestamp": "2026-03-18 09:45:54", "level": "PROGRESS", "message": "Phase: 构建索引, 2/4", "doc_id": "20260318_094507_7915", "current": 2, "total": 4, "phase": "构建索引", "detail": "准备第 2 页文本"}
+{"timestamp": "2026-03-18 09:45:54", "level": "PROGRESS", "message": "Phase: 构建索引, 3/4", "doc_id": "20260318_094507_7915", "current": 3, "total": 4, "phase": "构建索引", "detail": "准备第 3 页文本"}
+{"timestamp": "2026-03-18 09:45:54", "level": "PROGRESS", "message": "Phase: 构建索引, 4/4", "doc_id": "20260318_094507_7915", "current": 4, "total": 4, "phase": "构建索引", "detail": "准备第 4 页文本"}
+{"timestamp": "2026-03-18 09:45:54", "level": "INFO", "message": "len(group_texts): 1", "doc_id": "20260318_094507_7915"}
+{"timestamp": "2026-03-18 09:45:54", "level": "PROGRESS", "message": "Phase: 构建索引, 1/4", "doc_id": "20260318_094507_7915", "current": 1, "total": 4, "phase": "构建索引", "detail": "正在初始化层级结构..."}
+start generate_toc_init
+2026-03-18 09:45:55,419 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:55] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:55,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:55] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:45:58,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:58] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:45:58,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:45:58] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:01,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:01] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:01,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:01] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:04,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:04] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:04,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:04] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:07,414 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:07] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:07,504 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:07] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:10,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:10] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:10,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:10] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:13,450 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:13] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:13,541 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:13] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:16,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:16] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:16,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:16] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:19,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:19] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:19,534 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:19] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:22,415 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:22] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:22,501 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:22] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:25,414 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:25] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:25,506 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:25] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:28,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:28,541 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:31,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:31] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:31,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:31] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:34,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:34] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:34,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:34] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:37,440 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:37] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:37,542 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:37] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:40,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:40] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:40,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:40] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:43,500 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:43,621 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:46,496 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:46] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:46,584 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:46] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:49,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:49,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:52,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:52] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:52,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:52] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:55,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:55] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:55,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:55] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:46:57,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:46:57,604 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:46:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:00,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:00,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:03,476 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:03] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:03,571 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:03] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:06,419 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:06,512 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:09,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:09,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:12,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:12,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:12] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:15,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:15,538 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:18,418 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:18] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:18,511 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:18] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:21,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:21,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:24,415 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:24,507 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:27,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:27] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:27,512 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:27] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:30,421 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:30,510 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:33,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:33] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:33,608 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:33] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:36,420 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:36] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:36,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:36] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:39,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:39,532 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:42,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:42] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:42,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:42] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:45,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:45] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:45,510 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:48,417 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:48] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:48,509 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:48] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:51,416 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:51] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:51,504 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:51] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:54,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:54] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:54,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:54] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:47:57,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:47:57,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:47:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:00,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:00,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:03,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:03] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:03,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:03] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:06,437 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:06,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:09,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:09,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:12,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:12,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:12] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:15,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:15,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:18,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:18] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:18,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:18] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:21,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:21,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:24,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:24,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:27,440 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:27] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:27,547 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:27] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:30,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:30,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:32,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:32,627 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:34,637 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:34] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:34,735 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:34] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:36,731 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:36] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:36,820 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:36] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:39,418 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:39,507 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:42,419 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:42] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:42,510 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:42] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:44,996 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:44] "GET / HTTP/1.1" 200 -
+2026-03-18 09:48:45,098 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /static/js/app.js HTTP/1.1" 200 -
+2026-03-18 09:48:45,251 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq0MFq5 HTTP/1.1" 200 -
+2026-03-18 09:48:45,253 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /api/config/models HTTP/1.1" 200 -
+2026-03-18 09:48:45,257 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:45,270 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-18 09:48:45,364 - routes.socket_handlers - INFO - Client connected: aZ9ePD9IIHG3JDNYAAAF
+2026-03-18 09:48:45,365 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "POST /socket.io/?EIO=4&transport=polling&t=Pq0MFrZ&sid=QXHuZfymwhMsdKL-AAAE HTTP/1.1" 200 -
+2026-03-18 09:48:45,366 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq0MFrZ.0&sid=QXHuZfymwhMsdKL-AAAE HTTP/1.1" 200 -
+2026-03-18 09:48:45,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:45,451 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /socket.io/?EIO=4&transport=polling&t=Pq0MFtF&sid=QXHuZfymwhMsdKL-AAAE HTTP/1.1" 200 -
+2026-03-18 09:48:45,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:48,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:48] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:48,517 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:48] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:51,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:51] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:51,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:51] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:54,419 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:54] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:54,506 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:54] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:57,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:57,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:48:59,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:59] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:48:59,619 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:48:59] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:02,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:02] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:02,548 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:02] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:05,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:05] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:05,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:05] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:08,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:08] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:08,523 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:08] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:11,419 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:11] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:11,508 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:11] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:14,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:14] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:14,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:14] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:17,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:17,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:20,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:20] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:20,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:20] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:23,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:23] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:23,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:23] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:26,421 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:26] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:26,510 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:26] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:29,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:29] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:29,511 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:29] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:32,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:32,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:35,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:35] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:35,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:38,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:38] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:38,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:38] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:41,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:41] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:41,517 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:41] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:44,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:44] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:44,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:44] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:47,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:47] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:47,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:47] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:50,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:50] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:50,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:50] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:53,417 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:53] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:53,507 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:53] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:56,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:56] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:56,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:56] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:49:59,421 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:59] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:49:59,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:49:59] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:02,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:02] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:02,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:02] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:05,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:05] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:05,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:05] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:08,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:08] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:08,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:08] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:11,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:11] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:11,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:11] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:14,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:14] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:14,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:14] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:17,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:17,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:20,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:20] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:20,523 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:20] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:22,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:22] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:22,619 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:22] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:24,621 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:24,710 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:26,716 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:26] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:26,808 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:26] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:28,811 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:28,908 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:30,907 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:30,995 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:33,008 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:33] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:33,098 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:33] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:35,113 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:35] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:35,203 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:37,205 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:37] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:37,297 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:37] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:39,316 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:39,407 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:41,414 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:41] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:41,504 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:41] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:43,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:43,619 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:45,656 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:45] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:45,757 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:47,756 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:47] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:47,851 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:47] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:49,857 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:49,959 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:51,990 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:51] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:52,095 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:52] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:54,083 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:54] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:54,183 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:54] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:56,186 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:56] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:56,276 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:56] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:50:58,278 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:58] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:50:58,368 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:50:58] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:00,380 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:00,475 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:02,474 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:02] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:02,563 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:02] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:04,576 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:04] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:04,684 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:04] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:06,676 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:06,764 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:08,772 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:08] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:08,872 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:08] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:10,874 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:10] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:10,964 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:10] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:12,965 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:13,056 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:13] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:15,065 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:15,157 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:17,162 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:17,254 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:19,300 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:19] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:19,411 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:19] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:21,409 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:21,503 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:23,507 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:23] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:23,602 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:23] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:25,601 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:25] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:25,690 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:25] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:27,695 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:27] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:27,788 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:27] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:29,790 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:29] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:29,904 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:29] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:32,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:32,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:35,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:35] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:35,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:38,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:38] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:38,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:38] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:41,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:41] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:41,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:41] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:44,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:44] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:44,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:44] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:47,421 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:47] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:47,511 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:47] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:50,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:50] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:50,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:50] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:53,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:53] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:53,610 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:53] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:56,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:56] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:56,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:56] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:51:59,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:59] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:51:59,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:51:59] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:02,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:02] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:02,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:02] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:06,445 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:06,543 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:09,443 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:09,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:12,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:12,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:12] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:15,444 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:15,741 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:18,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:18] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:18,542 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:18] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:21,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:21,523 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:24,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:24,534 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:27,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:27] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:27,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:27] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:30,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:30,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:33,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:33] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:33,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:33] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:36,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:36] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:36,544 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:36] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:39,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:39,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:42,465 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:42] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:42,589 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:42] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:45,437 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:45] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:45,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:48,443 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:48] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:48,537 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:48] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:51,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:51] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:51,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:51] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:54,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:54] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:54,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:54] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:52:57,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:52:57,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:52:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:00,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:00,517 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:03,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:03] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:03,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:03] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:06,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:06,537 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:09,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:09,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:12,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:12,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:12] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:15,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:15,893 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:18,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:18] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:18,740 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:18] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:21,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:21,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:24,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:24,536 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:27,460 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:27] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:27,554 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:27] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:30,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:30,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:33,422 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:33] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:33,512 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:33] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:36,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:36] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:36,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:36] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:39,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:39,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:42,638 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:42] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:42,741 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:42] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:45,613 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:45] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:45,712 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:48,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:48] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:48,735 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:48] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:51,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:51] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:51,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:51] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:54,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:54] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:54,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:54] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:53:57,438 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:53:57,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:53:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:00,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:00,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:03,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:03] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:03,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:03] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:03,838 - routes.socket_handlers - INFO - Client disconnected: aZ9ePD9IIHG3JDNYAAAF
+2026-03-18 09:54:03,839 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:03] "GET /socket.io/?EIO=4&transport=websocket&sid=QXHuZfymwhMsdKL-AAAE HTTP/1.1" 200 -
+2026-03-18 09:54:06,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:06,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:09,627 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:09,994 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:12,395 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:12,704 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:12] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:15,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:15,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:18,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:18] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:18,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:18] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:21,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:21,512 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:24,633 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:24,727 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:27,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:27] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:27,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:27] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:30,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:30,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:33,437 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:33] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:33,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:33] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:36,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:36] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:36,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:36] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:39,421 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:39,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:42,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:42] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:42,523 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:42] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:45,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:45] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:45,516 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:45] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:48,445 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:48] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:48,538 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:48] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:51,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:51] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:51,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:51] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:54,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:54] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:54,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:54] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:54:57,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:54:57,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:54:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:00,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:00,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:03,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:03] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:03,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:03] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:06,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:06,592 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:09,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:09,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:11,564 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:11] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:11,706 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:11] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:14,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:14] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:14,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:14] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:17,447 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:17,557 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:20,447 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:20] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:20,544 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:20] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:23,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:23] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:23,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:23] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:26,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:26] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:26,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:26] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:29,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:29] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:29,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:29] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:32,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:32,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:35,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:35] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:35,545 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:38,448 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:38] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:38,566 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:38] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:41,444 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:41] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:41,563 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:41] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:44,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:44] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:44,542 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:44] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:47,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:47] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:47,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:47] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:50,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:50] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:50,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:50] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:53,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:53] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:53,534 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:53] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:54,444 - openai._base_client - INFO - Retrying request to /chat/completions in 0.390286 seconds
+2026-03-18 09:55:56,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:56] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:56,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:56] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:55:59,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:59] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:55:59,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:55:59] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:02,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:02] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:02,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:02] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:05,447 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:05] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:05,539 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:05] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:08,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:08] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:08,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:08] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:11,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:11] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:11,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:11] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:14,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:14] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:14,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:14] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:17,443 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:17,537 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:20,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:20] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:20,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:20] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:23,633 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:23] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:23,737 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:23] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:26,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:26] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:26,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:26] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:29,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:29] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:29,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:29] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:32,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:32,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:35,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:35] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:35,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:38,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:38] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:38,537 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:38] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:41,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:41] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:41,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:41] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:44,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:44] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:44,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:44] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:47,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:47] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:47,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:47] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:50,438 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:50] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:50,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:50] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:53,421 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:53] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:53,513 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:53] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:56,437 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:56] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:56,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:56] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:56:59,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:59] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:56:59,540 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:56:59] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:02,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:02] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:02,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:02] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:05,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:05] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:05,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:05] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:07,536 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:07] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:07,631 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:07] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:10,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:10] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:10,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:10] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:13,425 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:13] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:13,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:13] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:16,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:16] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:16,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:16] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:19,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:19] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:19,517 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:19] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:22,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:22] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:22,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:22] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:25,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:25] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:25,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:25] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:28,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:28,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:29,737 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-18 09:57:29,799 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+2026-03-18 09:57:29,882 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "GET /socket.io/?EIO=4&transport=polling&t=Pq0OFvN HTTP/1.1" 200 -
+2026-03-18 09:57:29,887 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:29,889 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "GET /api/config/models HTTP/1.1" 200 -
+2026-03-18 09:57:29,905 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-18 09:57:29,976 - routes.socket_handlers - INFO - Client connected: dzcrb5ZCGd0WtnwCAAAH
+2026-03-18 09:57:29,981 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "POST /socket.io/?EIO=4&transport=polling&t=Pq0OFwr&sid=DU_WI_P5H7tzFIEfAAAG HTTP/1.1" 200 -
+2026-03-18 09:57:29,982 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:29] "GET /socket.io/?EIO=4&transport=polling&t=Pq0OFwr.0&sid=DU_WI_P5H7tzFIEfAAAG HTTP/1.1" 200 -
+2026-03-18 09:57:30,078 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:30] "GET /socket.io/?EIO=4&transport=polling&t=Pq0OFyR&sid=DU_WI_P5H7tzFIEfAAAG HTTP/1.1" 200 -
+2026-03-18 09:57:31,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:31] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:31,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:31] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:34,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:34] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:34,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:34] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:34,549 - routes.socket_handlers - INFO - Client disconnected: dzcrb5ZCGd0WtnwCAAAH
+2026-03-18 09:57:34,549 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:34] "GET /socket.io/?EIO=4&transport=websocket&sid=DU_WI_P5H7tzFIEfAAAG HTTP/1.1" 200 -
+2026-03-18 09:57:37,440 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:37] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:37,528 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:37] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:40,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:40] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:40,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:40] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:43,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:43,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:46,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:46] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:46,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:46] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:49,443 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:49,541 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:52,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:52] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:52,538 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:52] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:55,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:55] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:55,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:55] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:57:57,523 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:57] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:57:57,617 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:57:57] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:00,438 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:00] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:00,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:00] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:03,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:03] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:03,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:03] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:06,440 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:06] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:06,536 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:06] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:09,437 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:09,531 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:12,441 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:12] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:12,536 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:12] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:15,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:15,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:18,437 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:18] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:18,534 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:18] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:21,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:21,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:24,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:24] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:24,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:24] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:26,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:26] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:26,618 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:26] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:28,612 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:28,705 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:30,718 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:30,815 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:32,826 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:32,921 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:34,919 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:34] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:35,014 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:37,019 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:37] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:37,125 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:37] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:39,120 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:39] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:39,210 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:39] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:41,216 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:41] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:41,305 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:41] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:43,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:43,537 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:46,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:46] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:46,529 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:46] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:49,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:49,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:52,429 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:52] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:52,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:52] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:55,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:55] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:55,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:55] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:58:58,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:58] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:58:58,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:58:58] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:01,458 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:01] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:01,550 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:01] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:04,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:04] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:04,519 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:04] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:07,014 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:07] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:07,107 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:07] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:09,108 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:09] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:09,204 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:09] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:11,201 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:11] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:11,292 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:11] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:13,308 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:13] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:13,401 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:13] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:15,412 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:15] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:15,507 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:15] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:17,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:17] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:17,621 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:17] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:19,616 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:19] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:19,707 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:19] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:21,715 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:21] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:21,808 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:21] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:23,814 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:23] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:23,915 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:23] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:25,908 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:25] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:25,999 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:25] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:28,000 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:28,098 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:30,099 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:30] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:30,201 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:30] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:32,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:32] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:32,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:32] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:35,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:35] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:35,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:35] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:38,111 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:38] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:38,204 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:38] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:40,424 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:40] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:40,514 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:40] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:43,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:43,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:46,428 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:46] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:46,518 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:46] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:49,431 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:49,530 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:49] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:52,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:52] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:52,536 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:52] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:55,440 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:55] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:55,532 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:55] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 09:59:58,472 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:58] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 09:59:58,565 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 09:59:58] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:01,497 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:01] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:01,599 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:01] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:04,435 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:04] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:04,538 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:04] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:07,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:07] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:07,533 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:07] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:10,433 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:10] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:10,525 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:10] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:13,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:13] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:13,527 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:13] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:16,469 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:16] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:16,569 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:16] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:19,438 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:19] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:19,532 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:19] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:22,442 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:22] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:22,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:22] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:25,442 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:25] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:25,577 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:25] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:28,423 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:28] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:28,515 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:28] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:31,439 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:31] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:31,535 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:31] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:34,430 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:34] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:34,521 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:34] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:37,434 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:37] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:37,526 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:37] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:40,426 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:40] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:40,520 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:40] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:43,432 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:43] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:43,524 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:43] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:46,427 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:46] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:46,522 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:46] "GET /api/documents HTTP/1.1" 200 -
+2026-03-18 10:00:49,436 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:49] "GET /api/documents/20260318_094507_7915/status HTTP/1.1" 200 -
+2026-03-18 10:00:49,539 - werkzeug - INFO - 172.19.225.154 - - [18/Mar/2026 10:00:49] "GET /api/documents HTTP/1.1" 200 -

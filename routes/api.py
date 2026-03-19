@@ -16,7 +16,6 @@ from werkzeug.utils import secure_filename
 from models.document import Document, document_store, UPLOADS_DIR, RESULTS_DIR
 from services.rag_service import rag_service
 from services.indexing_service import indexing_service
-from services.skill_manager import skill_manager, Skill
 from config import config_manager
 
 logger = logging.getLogger(__name__)
@@ -70,7 +69,7 @@ def list_documents():
 
 @api_bp.route('/documents/upload', methods=['POST'])
 def upload_document():
-    """Upload and index a PDF document"""
+    """Upload and index a PDF/Markdown document"""
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
     
@@ -78,8 +77,9 @@ def upload_document():
     if file.filename == '':
         return jsonify({'error': 'No file selected'}), 400
     
-    if not file.filename.lower().endswith('.pdf'):
-        return jsonify({'error': 'Only PDF files are supported'}), 400
+    allowed_extensions = {'.pdf', '.md'}
+    if not any(file.filename.lower().endswith(ext) for ext in allowed_extensions):
+        return jsonify({'error': 'Only PDF and Markdown files are supported'}), 400
     
     try:
         # Generate document ID using datetime prefix
@@ -106,33 +106,34 @@ def upload_document():
         
         # Start indexing in background
         from threading import Thread
+        socketio = current_app.extensions['socketio']
         
-        def run_indexing():
+        def run_indexing(app_context, socketio_instance):
             import asyncio
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
+            
+            def progress_callback(log_entry):
+                # Emit progress via socketio
+                # We use socketio_instance.emit directly
+                socketio_instance.emit('indexing_progress', log_entry)
+
             try:
                 success = loop.run_until_complete(
-                    indexing_service.index_pdf(doc_id, file_path, filename)
+                    indexing_service.index_document(doc_id, file_path, filename, progress_callback=progress_callback)
                 )
                 if success:
+                    # Prepare document for RAG
                     from services.rag_service import rag_service
                     doc = document_store.get_document(doc_id)
                     if doc and os.path.exists(doc.structure_path):
                         loop.run_until_complete(
                             rag_service.prepare_document(doc_id, file_path, doc.structure_path)
                         )
-                        # Direction 5: Proactive document analysis
-                        try:
-                            loop.run_until_complete(
-                                rag_service.auto_analyze_document(doc_id)
-                            )
-                        except Exception as e:
-                            logger.warning(f"Auto-analysis failed (non-fatal): {e}")
             finally:
                 loop.close()
         
-        thread = Thread(target=run_indexing)
+        thread = Thread(target=run_indexing, args=(current_app._get_current_object(), socketio))
         thread.start()
         
         return jsonify({
@@ -212,20 +213,6 @@ def get_tree_structure(doc_id):
     return jsonify({'tree': clean_tree})
 
 
-@api_bp.route('/documents/<doc_id>/analysis', methods=['GET'])
-def get_document_analysis(doc_id):
-    """Get proactive document analysis (Direction 5)"""
-    doc = document_store.get_document(doc_id)
-    if not doc:
-        return jsonify({'error': 'Document not found'}), 404
-
-    analysis = document_store.get_analysis(doc_id)
-    if not analysis:
-        return jsonify({'error': 'Analysis not available yet'}), 404
-
-    return jsonify({'analysis': analysis})
-
-
 @api_bp.route('/documents/<doc_id>/node-info', methods=['GET'])
 def get_node_info(doc_id):
     """Get node mapping and page image URLs for preview functionality"""
@@ -275,6 +262,7 @@ def get_node_info(doc_id):
         node_info[node_id] = {
             'title': node.get('title', ''),
             'summary': node.get('summary', ''),
+            'text': node.get('text', ''), # Add raw text for MD preview
             'start_index': start_index,
             'end_index': end_index
         }
@@ -291,108 +279,3 @@ def get_node_info(doc_id):
         'page_count': page_count,
         'all_pages': all_pages
     })
-
-
-@api_bp.route('/documents/<doc_id>/text-highlights', methods=['GET'])
-def get_text_highlights(doc_id):
-    """Return per-page text block positions with node ownership for overlay highlighting."""
-    doc = document_store.get_document(doc_id)
-    if not doc:
-        return jsonify({'error': 'Document not found'}), 404
-    if doc.status != 'ready':
-        return jsonify({'error': 'Document not ready'}), 400
-
-    cache_path = os.path.join(doc.result_dir, 'text_highlights.json')
-    if os.path.exists(cache_path):
-        with open(cache_path, 'r', encoding='utf-8') as f:
-            return jsonify(json.load(f))
-
-    node_map = document_store.get_node_map(doc_id)
-    if not node_map:
-        return jsonify({'error': 'Node mapping not available'}), 404
-
-    from services.rag_service import PageIndexService
-    service = PageIndexService(document_store)
-
-    try:
-        highlights = service.extract_text_highlights(doc.file_path, node_map)
-    except Exception as e:
-        logger.error(f"Text highlight extraction error: {e}")
-        return jsonify({'error': str(e)}), 500
-
-    try:
-        os.makedirs(os.path.dirname(cache_path), exist_ok=True)
-        with open(cache_path, 'w', encoding='utf-8') as f:
-            json.dump(highlights, f, ensure_ascii=False)
-    except Exception as e:
-        logger.warning(f"Failed to cache highlights: {e}")
-
-    return jsonify(highlights)
-
-
-# ============= Skill Routes =============
-
-@api_bp.route('/skills', methods=['GET'])
-def list_skills():
-    """List all custom agent skills"""
-    skills = skill_manager.list_skills()
-    return jsonify({'skills': [s.to_dict() for s in skills]})
-
-
-@api_bp.route('/skills', methods=['POST'])
-def create_skill():
-    """Create a new skill"""
-    data = request.json or {}
-    name = data.get('name', '').strip()
-    if not name:
-        return jsonify({'error': 'Skill name is required'}), 400
-    skill = skill_manager.create_skill(
-        name=name,
-        description=data.get('description', ''),
-        content=data.get('content', ''),
-        enabled=data.get('enabled', True),
-    )
-    return jsonify({'success': True, 'skill': skill.to_dict()})
-
-
-@api_bp.route('/skills/<skill_id>', methods=['GET'])
-def get_skill(skill_id):
-    """Get a single skill"""
-    skill = skill_manager.get_skill(skill_id)
-    if not skill:
-        return jsonify({'error': 'Skill not found'}), 404
-    return jsonify({'skill': skill.to_dict()})
-
-
-@api_bp.route('/skills/<skill_id>', methods=['PUT'])
-def update_skill(skill_id):
-    """Update a skill"""
-    data = request.json or {}
-    skill = skill_manager.update_skill(skill_id, **data)
-    if not skill:
-        return jsonify({'error': 'Skill not found'}), 404
-    return jsonify({'success': True, 'skill': skill.to_dict()})
-
-
-@api_bp.route('/skills/<skill_id>', methods=['DELETE'])
-def delete_skill(skill_id):
-    """Delete a skill"""
-    if skill_manager.delete_skill(skill_id):
-        return jsonify({'success': True})
-    return jsonify({'error': 'Skill not found'}), 404
-
-
-@api_bp.route('/skills/upload', methods=['POST'])
-def upload_skill():
-    """Upload a skill from a .md file"""
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file provided'}), 400
-    file = request.files['file']
-    if not file.filename or not file.filename.endswith('.md'):
-        return jsonify({'error': 'Only .md files are supported'}), 400
-
-    content = file.read().decode('utf-8')
-    skill_id = secure_filename(file.filename)[:-3]
-    skill = Skill.from_markdown(content, skill_id)
-    skill_manager.save_skill(skill)
-    return jsonify({'success': True, 'skill': skill.to_dict()})

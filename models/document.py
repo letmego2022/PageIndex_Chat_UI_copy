@@ -73,12 +73,7 @@ class Document:
     def chat_history_path(self) -> str:
         """Get chat history file path"""
         return os.path.join(self.result_dir, 'chat_history.json')
-
-    @property
-    def analysis_path(self) -> str:
-        """Get auto-analysis file path"""
-        return os.path.join(self.result_dir, 'analysis.json')
-
+    
     def to_dict(self):
         return asdict(self)
 
@@ -350,6 +345,7 @@ class DocumentStore:
                 page_images = {}
                 for filename in os.listdir(doc.images_dir):
                     if filename.endswith(('.png', '.jpg', '.jpeg')):
+                        # filename format: page_X.png or page_X.jpg
                         try:
                             page_num = int(filename.replace('page_', '').split('.')[0])
                             page_images[page_num] = os.path.join(doc.images_dir, filename)
@@ -360,19 +356,6 @@ class DocumentStore:
                     return page_images
             except Exception as e:
                 print(f"Error loading page images from disk: {e}")
-        return None
-
-    def get_analysis(self, doc_id: str) -> Optional[dict]:
-        """Get document analysis (proactive agent analysis)"""
-        doc = self.get_document(doc_id)
-        if not doc:
-            return None
-        if os.path.exists(doc.analysis_path):
-            try:
-                with open(doc.analysis_path, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except Exception as e:
-                print(f"Error loading analysis: {e}")
         return None
 
 

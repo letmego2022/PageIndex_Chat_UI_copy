@@ -79,11 +79,22 @@ class PageIndexService:
             return f"[Error: {str(e)}]"
     
     async def call_vlm(self, prompt: str, image_paths: List[str], model_type: str = 'vision') -> str:
-        """Call Vision Language Model with images (non-streaming)"""
+        """Call Vision Language Model with images"""
         client = self._get_client(model_type)
         model = self._get_model_name(model_type)
         
-        content = self._build_vlm_content(prompt, image_paths)
+        content = [{"type": "text", "text": prompt}]
+        
+        for image_path in image_paths:
+            if os.path.exists(image_path):
+                with open(image_path, "rb") as f:
+                    image_data = base64.b64encode(f.read()).decode('utf-8')
+                content.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{image_data}"
+                    }
+                })
         
         try:
             response = await client.chat.completions.create(
@@ -99,44 +110,6 @@ class PageIndexService:
         except Exception as e:
             logger.error(f"VLM call error: {e}")
             return f"[Error: {str(e)}]"
-
-    async def call_vlm_stream(self, prompt: str, image_paths: List[str], model_type: str = 'vision'):
-        """Stream Vision Language Model response with images"""
-        client = self._get_client(model_type)
-        model = self._get_model_name(model_type)
-
-        content = self._build_vlm_content(prompt, image_paths)
-
-        try:
-            stream = await client.chat.completions.create(
-                model=model,
-                messages=[{"role": "user", "content": content}],
-                temperature=0,
-                stream=True,
-            )
-            async for chunk in stream:
-                if chunk.choices and len(chunk.choices) > 0:
-                    if chunk.choices[0].delta.content:
-                        yield chunk.choices[0].delta.content
-        except Exception as e:
-            logger.error(f"VLM stream error: {e}")
-            yield f"[Error: {str(e)}]"
-
-    @staticmethod
-    def _build_vlm_content(prompt: str, image_paths: List[str]) -> list:
-        """Build multimodal content list for VLM calls"""
-        content = [{"type": "text", "text": prompt}]
-        for image_path in image_paths:
-            if os.path.exists(image_path):
-                with open(image_path, "rb") as f:
-                    image_data = base64.b64encode(f.read()).decode('utf-8')
-                content.append({
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64,{image_data}"
-                    }
-                })
-        return content
     
     def load_tree_structure(self, tree_path: str) -> dict:
         """Load tree structure from JSON file"""
@@ -203,11 +176,9 @@ Question: {query}
 Document tree structure:
 {json.dumps(tree_without_text, indent=2, ensure_ascii=False)}
 
-Important: You MUST respond in Chinese (简体中文). Your thinking process should be in Chinese.
-
 Please reply in the following JSON format:
 {{
-    "thinking": "<用中文描述你的推理过程>",
+    "thinking": "<Your thinking process on which nodes are relevant to the question>",
     "node_list": ["node_id_1", "node_id_2", ..., "node_id_n"]
 }}
 Directly return the final JSON structure. Do not output anything else.
@@ -228,14 +199,17 @@ Directly return the final JSON structure. Do not output anything else.
             return {"thinking": "Error parsing response", "node_list": []}
     
     async def tree_search_stream(self, query: str, tree: dict, model_type: str = 'text'):
-        """Perform tree search with streaming thinking output
+        """Perform tree search with streaming thinking output"""
+        import time
+        start_time = time.time()
         
-        Yields:
-            tuple: (chunk_type, content)
-                - ('thinking', str): thinking text chunk
-                - ('node_list', list): final node list
-        """
+        # 移除正文，仅保留结构和摘要用于搜索
         tree_without_text = self.remove_fields(tree.copy(), ['text'])
+        tree_json = json.dumps(tree_without_text, indent=2, ensure_ascii=False)
+        
+        # 立即反馈
+        yield ('thinking', f"正在检索文档索引树 (规模: {len(tree_json)} 字符)...\n")
+        logger.info(f"Tree Search started. Prompt tree size: {len(tree_json)} chars")
         
         search_prompt = f"""You are given a question and a tree structure of a document.
 Each node contains a node id, node title, and a corresponding summary.
@@ -244,32 +218,46 @@ Your task is to find all nodes that are likely to contain the answer to the ques
 Question: {query}
 
 Document tree structure:
-{json.dumps(tree_without_text, indent=2, ensure_ascii=False)}
+{tree_json}
 
-Important: You MUST respond in Chinese (简体中文). Your thinking process should be in Chinese.
-
-First, output your thinking process in Chinese about which nodes are relevant to the question.
+First, output your thinking process about which nodes are relevant to the question.
 Then, at the very end, output the node list in this EXACT format on a new line:
 [NODE_LIST]: ["node_id_1", "node_id_2", "node_id_n"]
 
 Example output:
-根据文档结构，我需要找到与问题相关的节点...
-最相关的节点是X和Y，因为...
+Looking at the document structure, I need to find nodes related to the question...
+The most relevant nodes appear to be X and Y because...
 [NODE_LIST]: ["node_x", "node_y"]
 """
         
         full_response = ""
         buffer = ""
-        node_list_str = ""
+        node_list_received = False
         
-        async for chunk in self.call_llm_stream(search_prompt, model_type):
-            full_response += chunk
-            buffer += chunk
-            
-            # Stream thinking content (including node list part)
-            if len(buffer) > 20:  # Buffer a bit for smoother output
+        try:
+            async for chunk in self.call_llm_stream(search_prompt, model_type):
+                if not full_response:
+                    logger.info(f"Tree Search first token received after {time.time() - start_time:.2f}s")
+                
+                full_response += chunk
+                buffer += chunk
+                
+                # Stream thinking content
+                if len(buffer) > 5:  # 更小的缓冲区，更快的响应
+                    yield ('thinking', buffer)
+                    buffer = ""
+                
+                if '[NODE_LIST]:' in full_response and not node_list_received:
+                    node_list_received = True
+                    logger.info("Node list marker detected in stream")
+
+            if buffer:
                 yield ('thinking', buffer)
-                buffer = ""
+                
+            logger.info(f"Tree Search completed in {time.time() - start_time:.2f}s")
+        except Exception as e:
+            logger.error(f"Tree search stream error: {e}")
+            yield ('thinking', f"\n[搜索异常: {str(e)}]")
             
             # Check if we have a complete node list
             if '[NODE_LIST]:' in buffer and not node_list_str:
@@ -349,12 +337,15 @@ Example output:
         
         return image_paths
     
-    async def extract_pdf_page_images(self, pdf_path: str, output_dir: str) -> dict:
-        """Extract page images from PDF"""
+    async def extract_page_images(self, file_path: str, output_dir: str) -> dict:
+        """Extract page images from PDF (skip for Markdown)"""
+        if not file_path.lower().endswith(".pdf"):
+            return {}
+            
         import fitz  # PyMuPDF
         
         os.makedirs(output_dir, exist_ok=True)
-        pdf_document = fitz.open(pdf_path)
+        pdf_document = fitz.open(file_path)
         page_images = {}
         
         for page_number in range(len(pdf_document)):
@@ -370,89 +361,21 @@ Example output:
         pdf_document.close()
         return page_images
     
-    def get_pdf_page_count(self, pdf_path: str) -> int:
-        """Get PDF page count"""
+    def get_page_count(self, file_path: str) -> int:
+        """Get page count for PDF or Markdown"""
+        if file_path.lower().endswith(".md"):
+            # For Markdown, we check the images directory which should have been populated
+            # The calling code should ideally handle this via image scanning
+            return 0 
+            
         import fitz
-        doc = fitz.open(pdf_path)
-        count = len(doc)
-        doc.close()
-        return count
-
-    def extract_text_highlights(self, pdf_path: str, node_map: dict) -> dict:
-        """Extract text block positions per page and assign each block to a node.
-
-        Returns ``{"scale": 2.0, "pages": { "<page_num>": { "width", "height", "blocks": [...] } }}``
-        where each block has ``bbox`` (4-element list in PDF points) and ``node_id``.
-        """
-        import fitz
-
-        page_to_nodes: Dict[int, List[dict]] = {}
-        for nid, info in node_map.items():
-            s = info.get("start_index") or 1
-            e = info.get("end_index") or s
-            node_obj = info.get("node", info)
-            node_text = node_obj.get("text", "") if isinstance(node_obj, dict) else ""
-            for p in range(s, e + 1):
-                page_to_nodes.setdefault(p, []).append({
-                    "id": nid, "text": node_text, "start": s, "end": e
-                })
-
-        doc = fitz.open(pdf_path)
-        result = {"scale": 2.0, "pages": {}}
-
-        for page_number in range(len(doc)):
-            page = doc.load_page(page_number)
-            pnum = page_number + 1
-            rect = page.rect
-            page_data = {
-                "width": rect.width,
-                "height": rect.height,
-                "blocks": [],
-            }
-
-            candidates = page_to_nodes.get(pnum, [])
-            if not candidates:
-                result["pages"][str(pnum)] = page_data
-                continue
-
-            text_dict = page.get_text("dict", flags=fitz.TEXT_PRESERVE_WHITESPACE)
-            for block in text_dict.get("blocks", []):
-                if block.get("type") != 0:
-                    continue
-                bbox = block.get("bbox")
-                if not bbox:
-                    continue
-
-                block_text = ""
-                for line in block.get("lines", []):
-                    for span in line.get("spans", []):
-                        block_text += span.get("text", "")
-
-                block_text_stripped = block_text.strip()
-                if not block_text_stripped:
-                    continue
-
-                owner = None
-                if len(candidates) == 1:
-                    owner = candidates[0]["id"]
-                else:
-                    for c in reversed(candidates):
-                        if c["text"] and block_text_stripped in c["text"]:
-                            owner = c["id"]
-                            break
-                    if not owner:
-                        owner = candidates[0]["id"]
-
-                page_data["blocks"].append({
-                    "bbox": [round(bbox[0], 1), round(bbox[1], 1),
-                             round(bbox[2], 1), round(bbox[3], 1)],
-                    "node_id": owner,
-                })
-
-            result["pages"][str(pnum)] = page_data
-
-        doc.close()
-        return result
+        try:
+            doc = fitz.open(file_path)
+            count = len(doc)
+            doc.close()
+            return count
+        except Exception:
+            return 0
 
 
 class RAGService:
@@ -461,16 +384,8 @@ class RAGService:
     def __init__(self, store: DocumentStore):
         self.store = store
         self.pageindex = PageIndexService(store)
-        self._agent = None
-
-    @property
-    def agent(self):
-        if self._agent is None:
-            from services.agent import DocumentAgent
-            self._agent = DocumentAgent(self.pageindex, self.store)
-        return self._agent
     
-    async def prepare_document(self, doc_id: str, pdf_path: str, tree_path: str):
+    async def prepare_document(self, doc_id: str, file_path: str, tree_path: str):
         """Prepare document for RAG - load tree and extract images"""
         doc = self.store.get_document(doc_id)
         if not doc:
@@ -481,20 +396,24 @@ class RAGService:
             tree = self.pageindex.load_tree_structure(tree_path)
             self.store.cache_tree(doc_id, tree)
             
-            # Get page count
-            page_count = self.pageindex.get_pdf_page_count(pdf_path)
+            # Extract/Load page images
+            # If MD, they should have been generated during indexing
+            page_images = self.store.get_page_images(doc_id)
+            if not page_images:
+                page_images = await self.pageindex.extract_page_images(file_path, doc.images_dir)
+                self.store.cache_page_images(doc_id, page_images)
+            
+            # Update page count from images found
+            page_count = len(page_images) if page_images else self.pageindex.get_page_count(file_path)
             self.store.update_document(doc_id, page_count=page_count)
             
             # Create node mapping
             node_map = self.pageindex.create_node_mapping(tree, include_page_ranges=True, max_page=page_count)
             self.store.cache_node_map(doc_id, node_map)
             
-            # Extract page images for vision mode (save to doc.images_dir)
-            page_images = await self.pageindex.extract_pdf_page_images(pdf_path, doc.images_dir)
-            self.store.cache_page_images(doc_id, page_images)
-            
             self.store.update_document(doc_id, status='ready')
             return True
+
         except Exception as e:
             logger.error(f"Error preparing document: {e}")
             self.store.update_document(doc_id, status='error', error_message=str(e))
@@ -517,16 +436,16 @@ class RAGService:
             yield "[PREPARING]\n正在准备文档数据...\n"
             try:
                 # Get page count
-                page_count = self.pageindex.get_pdf_page_count(doc.file_path)
+                page_count = self.pageindex.get_page_count(doc.file_path)
                 self.store.update_document(doc_id, page_count=page_count)
                 
                 # Create node mapping
                 node_map = self.pageindex.create_node_mapping(tree, include_page_ranges=True, max_page=page_count)
                 self.store.cache_node_map(doc_id, node_map)
                 
-                # Extract page images if needed
+                # Extract page images (if PDF)
                 if not page_images:
-                    page_images = await self.pageindex.extract_pdf_page_images(doc.file_path, doc.images_dir)
+                    page_images = await self.pageindex.extract_page_images(doc.file_path, doc.images_dir)
                     self.store.cache_page_images(doc_id, page_images)
                 
                 yield "[PREPARED]\n准备完成！\n\n"
@@ -583,10 +502,7 @@ Question: {query}
 Context: {relevant_content}
 {history_context}
 
-Important: You MUST respond in Chinese (简体中文). All your output should be in Chinese.
-When mentioning any mathematical symbol, variable, subscript, superscript, or formula, you MUST wrap them in LaTeX delimiters: use $...$ for inline math (e.g. $s_j$, $f_{{MD}}$) and \\[...\\] for display math. NEVER output bare symbols like x_i without dollar signs.
-Provide a clear, concise answer in Chinese based only on the context provided. If you need to reference specific sections, mention the node IDs.
-Use Markdown formatting for better readability.
+Provide a clear, concise answer based only on the context provided. If you need to reference specific sections, mention the node IDs.
 """
             
             # Stream answer
@@ -617,24 +533,19 @@ Use Markdown formatting for better readability.
 
 Question: {query}
 
-Important: You MUST respond in Chinese (简体中文). All your output should be in Chinese.
-When mentioning any mathematical symbol, variable, subscript, superscript, or formula, you MUST wrap them in LaTeX delimiters: use $...$ for inline math (e.g. $s_j$, $f_{{MD}}$) and \\[...\\] for display math. NEVER output bare symbols like x_i without dollar signs.
-Provide a clear, concise answer in Chinese based only on the context provided.
-Use Markdown formatting for better readability.
+Provide a clear, concise answer based only on the context provided.
 """
             
-            # Stream answer for vision mode
+            # Get answer (non-streaming for vision)
             yield "[ANSWERING]\n"
-            full_answer = ""
-            async for chunk in self.pageindex.call_vlm_stream(answer_prompt, image_paths, model_type):
-                full_answer += chunk
-                yield chunk
+            answer = await self.pageindex.call_vlm(answer_prompt, image_paths, model_type)
+            yield answer
             
             # Save to history
             self.store.add_message(doc_id, Message(role='user', content=query))
             self.store.add_message(doc_id, Message(
                 role='assistant',
-                content=full_answer,
+                content=answer,
                 nodes=node_list,
                 thinking=thinking
             ))
@@ -647,18 +558,6 @@ Use Markdown formatting for better readability.
     def clear_chat_history(self, doc_id: str):
         """Clear chat history for a document"""
         self.store.clear_chat_history(doc_id)
-
-    async def agent_chat_stream(self, doc_id: str, query: str,
-                                model_type: str = 'text',
-                                use_memory: bool = True):
-        """Agent-powered chat with ReAct loop, decomposition, and reflection"""
-        async for chunk in self.agent.run(doc_id, query, model_type, use_memory):
-            yield chunk
-
-    async def auto_analyze_document(self, doc_id: str,
-                                    model_type: str = 'text') -> dict:
-        """Proactive document analysis after indexing"""
-        return await self.agent.analyze_document(doc_id, model_type)
 
 
 # Create singleton instance

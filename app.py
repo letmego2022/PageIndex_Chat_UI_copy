@@ -34,6 +34,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Initialize SocketIO
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
+app.extensions['socketio'] = socketio
 
 # Import and register routes
 from routes.api import api_bp
@@ -77,4 +78,4 @@ if __name__ == '__main__':
     os.makedirs(RESULTS_DIR, exist_ok=True)
     
     logger.info("Starting PageIndex Chat UI server...")
-    socketio.run(app, host='0.0.0.0', port=5001, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, host='0.0.0.0', port=8001, debug=True, allow_unsafe_werkzeug=True)

@@ -9,18 +9,6 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
-def _normalize_yes_no(value, default='no'):
-    """Normalize model outputs to 'yes'/'no' strings for robust control flow."""
-    if value is None:
-        return default
-    text = str(value).strip().lower()
-    if text in {'yes', 'y', 'true', '1'}:
-        return 'yes'
-    if text in {'no', 'n', 'false', '0'}:
-        return 'no'
-    return default
-
-
 ################### check title in page #########################################################
 async def check_title_appearance(item, page_list, start_index=1, model=None):    
     title=item['title']
@@ -131,7 +119,7 @@ def toc_detector_single_page(content, model=None):
     response = ChatGPT_API(model=model, prompt=prompt)
     # print('response', response)
     json_content = extract_json(response)    
-    return _normalize_yes_no(json_content.get('toc_detected'), default='no')
+    return json_content['toc_detected']
 
 
 def check_if_toc_extraction_is_complete(content, toc, model=None):
@@ -149,7 +137,7 @@ def check_if_toc_extraction_is_complete(content, toc, model=None):
     prompt = prompt + '\n Document:\n' + content + '\n Table of contents:\n' + toc
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)
-    return _normalize_yes_no(json_content.get('completed'), default='no')
+    return json_content['completed']
 
 
 def check_if_toc_transformation_is_complete(content, toc, model=None):
@@ -167,7 +155,7 @@ def check_if_toc_transformation_is_complete(content, toc, model=None):
     prompt = prompt + '\n Raw Table of contents:\n' + content + '\n Cleaned Table of contents:\n' + toc
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)
-    return _normalize_yes_no(json_content.get('completed'), default='no')
+    return json_content['completed']
 
 def extract_toc_content(content, model=None):
     prompt = f"""
@@ -191,17 +179,18 @@ def extract_toc_content(content, model=None):
     new_response, finish_reason = ChatGPT_API_with_finish_reason(model=model, prompt=prompt, chat_history=chat_history)
     response = response + new_response
     if_complete = check_if_toc_transformation_is_complete(content, response, model)
-
-    attempts = 1
+    
+    attempt = 0
     max_attempts = 5
+
     while not (if_complete == "yes" and finish_reason == "finished"):
-        attempts += 1
-        if attempts > max_attempts:
+        attempt += 1
+        if attempt > max_attempts:
             raise Exception('Failed to complete table of contents after maximum retries')
 
         chat_history = [
-            {"role": "user", "content": prompt}, 
-            {"role": "assistant", "content": response},    
+            {"role": "user", "content": prompt},
+            {"role": "assistant", "content": response},
         ]
         prompt = f"""please continue the generation of table of contents , directly output the remaining part of the structure"""
         new_response, finish_reason = ChatGPT_API_with_finish_reason(model=model, prompt=prompt, chat_history=chat_history)
@@ -228,7 +217,7 @@ def detect_page_index(toc_content, model=None):
 
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)
-    return _normalize_yes_no(json_content.get('page_index_given_in_toc'), default='no')
+    return json_content['page_index_given_in_toc']
 
 def toc_extractor(page_list, toc_page_list, model):
     def transform_dots_to_colon(text):
@@ -253,7 +242,7 @@ def toc_extractor(page_list, toc_page_list, model):
 
 def toc_index_extractor(toc, content, model=None):
     print('start toc_index_extractor')
-    tob_extractor_prompt = """
+    toc_extractor_prompt = """
     You are given a table of contents in a json format and several pages of a document, your job is to add the physical_index to the table of contents in the json format.
 
     The provided pages contains tags like <physical_index_X> and <physical_index_X> to indicate the physical location of the page X.
@@ -274,7 +263,7 @@ def toc_index_extractor(toc, content, model=None):
     If the section is not in the provided pages, do not add the physical_index to it.
     Directly return the final JSON structure. Do not output anything else."""
 
-    prompt = tob_extractor_prompt + '\nTable of contents:\n' + str(toc) + '\nDocument pages:\n' + content
+    prompt = toc_extractor_prompt + '\nTable of contents:\n' + str(toc) + '\nDocument pages:\n' + content
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)    
     return json_content
@@ -583,51 +572,81 @@ def process_no_toc(page_list, start_index=1, model=None, logger=None):
     page_contents=[]
     token_lengths=[]
     for page_index in range(start_index, start_index+len(page_list)):
+        if logger:
+            logger.progress(page_index, start_index+len(page_list)-1, "构建索引", detail=f"准备第 {page_index} 页文本")
         page_text = f"<physical_index_{page_index}>\n{page_list[page_index-start_index][0]}\n<physical_index_{page_index}>\n\n"
         page_contents.append(page_text)
         token_lengths.append(count_tokens(page_text, model))
     group_texts = page_list_to_group_text(page_contents, token_lengths)
-    logger.info(f'len(group_texts): {len(group_texts)}')
+    if logger:
+        logger.info(f'len(group_texts): {len(group_texts)}')
 
+    if logger:
+        logger.progress(start_index, start_index+len(page_list)-1, "构建索引", detail="正在初始化层级结构...")
     toc_with_page_number= generate_toc_init(group_texts[0], model)
+    
+    # Ensure toc_with_page_number is a list
+    if not isinstance(toc_with_page_number, list):
+        if logger:
+            logger.error(f"generate_toc_init returned non-list: {type(toc_with_page_number)}")
+        toc_with_page_number = []
+
     for group_text in group_texts[1:]:
+        if logger:
+            logger.progress(None, None, "构建索引", detail="正在解析后续章节...")
         toc_with_page_number_additional = generate_toc_continue(toc_with_page_number, group_text, model)    
-        toc_with_page_number.extend(toc_with_page_number_additional)
-    logger.info(f'generate_toc: {toc_with_page_number}')
+        if isinstance(toc_with_page_number_additional, list):
+            toc_with_page_number.extend(toc_with_page_number_additional)
+    
+    if logger:
+        logger.info(f'generate_toc: {toc_with_page_number}')
 
     toc_with_page_number = convert_physical_index_to_int(toc_with_page_number)
-    logger.info(f'convert_physical_index_to_int: {toc_with_page_number}')
+    if logger:
+        logger.info(f'convert_physical_index_to_int: {toc_with_page_number}')
 
     return toc_with_page_number
 
 def process_toc_no_page_numbers(toc_content, toc_page_list, page_list,  start_index=1, model=None, logger=None):
     page_contents=[]
     token_lengths=[]
+    if logger:
+        logger.progress(0, len(page_list), "转换目录", detail="正在解析原始目录结构...")
     toc_content = toc_transformer(toc_content, model)
-    logger.info(f'toc_transformer: {toc_content}')
+    if logger:
+        logger.info(f'toc_transformer: {toc_content}')
     for page_index in range(start_index, start_index+len(page_list)):
+        if logger:
+            logger.progress(page_index, start_index+len(page_list)-1, "定位章节", detail=f"准备第 {page_index} 页文本")
         page_text = f"<physical_index_{page_index}>\n{page_list[page_index-start_index][0]}\n<physical_index_{page_index}>\n\n"
         page_contents.append(page_text)
         token_lengths.append(count_tokens(page_text, model))
     
     group_texts = page_list_to_group_text(page_contents, token_lengths)
-    logger.info(f'len(group_texts): {len(group_texts)}')
+    if logger:
+        logger.info(f'len(group_texts): {len(group_texts)}')
 
     toc_with_page_number=copy.deepcopy(toc_content)
-    for group_text in group_texts:
+    for idx, group_text in enumerate(group_texts):
+        if logger:
+            logger.progress(idx + 1, len(group_texts), "定位章节", detail=f"正在匹配第 {idx+1}/{len(group_texts)} 组文本的页码")
         toc_with_page_number = add_page_number_to_toc(group_text, toc_with_page_number, model)
-    logger.info(f'add_page_number_to_toc: {toc_with_page_number}')
+    
+    if logger:
+        logger.info(f'add_page_number_to_toc: {toc_with_page_number}')
 
     toc_with_page_number = convert_physical_index_to_int(toc_with_page_number)
-    logger.info(f'convert_physical_index_to_int: {toc_with_page_number}')
+    if logger:
+        logger.info(f'convert_physical_index_to_int: {toc_with_page_number}')
 
     return toc_with_page_number
 
-
-
 def process_toc_with_page_numbers(toc_content, toc_page_list, page_list, toc_check_page_num=None, model=None, logger=None):
+    if logger:
+        logger.progress(0, len(page_list), "转换目录", detail="正在解析目录页码...")
     toc_with_page_number = toc_transformer(toc_content, model)
-    logger.info(f'toc_with_page_number: {toc_with_page_number}')
+    if logger:
+        logger.info(f'toc_with_page_number: {toc_with_page_number}')
 
     toc_no_page_number = remove_page_number(copy.deepcopy(toc_with_page_number))
     
@@ -636,23 +655,33 @@ def process_toc_with_page_numbers(toc_content, toc_page_list, page_list, toc_che
     for page_index in range(start_page_index, min(start_page_index + toc_check_page_num, len(page_list))):
         main_content += f"<physical_index_{page_index+1}>\n{page_list[page_index][0]}\n<physical_index_{page_index+1}>\n\n"
 
+    if logger:
+        logger.progress(start_page_index, len(page_list), "校准页码", detail="正在计算物理页码偏移...")
     toc_with_physical_index = toc_index_extractor(toc_no_page_number, main_content, model)
-    logger.info(f'toc_with_physical_index: {toc_with_physical_index}')
+    if logger:
+        logger.info(f'toc_with_physical_index: {toc_with_physical_index}')
 
     toc_with_physical_index = convert_physical_index_to_int(toc_with_physical_index)
-    logger.info(f'toc_with_physical_index: {toc_with_physical_index}')
+    if logger:
+        logger.info(f'toc_with_physical_index: {toc_with_physical_index}')
 
     matching_pairs = extract_matching_page_pairs(toc_with_page_number, toc_with_physical_index, start_page_index)
-    logger.info(f'matching_pairs: {matching_pairs}')
+    if logger:
+        logger.info(f'matching_pairs: {matching_pairs}')
 
     offset = calculate_page_offset(matching_pairs)
-    logger.info(f'offset: {offset}')
+    if logger:
+        logger.info(f'offset: {offset}')
 
+    if logger:
+        logger.progress(start_page_index, len(page_list), "应用校准", detail=f"检测到页码偏移: {offset}")
     toc_with_page_number = add_page_offset_to_toc_json(toc_with_page_number, offset)
-    logger.info(f'toc_with_page_number: {toc_with_page_number}')
+    if logger:
+        logger.info(f'toc_with_page_number: {toc_with_page_number}')
 
     toc_with_page_number = process_none_page_numbers(toc_with_page_number, page_list, model=model)
-    logger.info(f'toc_with_page_number: {toc_with_page_number}')
+    if logger:
+        logger.info(f'toc_with_page_number: {toc_with_page_number}')
 
     return toc_with_page_number
 
@@ -708,13 +737,13 @@ def check_toc(page_list, opt=None):
         print('toc found')
         toc_json = toc_extractor(page_list, toc_page_list, opt.model)
 
-        if _normalize_yes_no(toc_json.get('page_index_given_in_toc')) == 'yes':
+        if toc_json['page_index_given_in_toc'] == 'yes':
             print('index found')
             return {'toc_content': toc_json['toc_content'], 'toc_page_list': toc_page_list, 'page_index_given_in_toc': 'yes'}
         else:
             current_start_index = toc_page_list[-1] + 1
             
-            while (_normalize_yes_no(toc_json.get('page_index_given_in_toc')) == 'no' and 
+            while (toc_json['page_index_given_in_toc'] == 'no' and 
                    current_start_index < len(page_list) and 
                    current_start_index < opt.toc_check_page_num):
                 
@@ -728,7 +757,7 @@ def check_toc(page_list, opt=None):
                     break
 
                 additional_toc_json = toc_extractor(page_list, additional_toc_pages, opt.model)
-                if _normalize_yes_no(additional_toc_json.get('page_index_given_in_toc')) == 'yes':
+                if additional_toc_json['page_index_given_in_toc'] == 'yes':
                     print('index found')
                     return {'toc_content': additional_toc_json['toc_content'], 'toc_page_list': additional_toc_pages, 'page_index_given_in_toc': 'yes'}
 
@@ -744,7 +773,7 @@ def check_toc(page_list, opt=None):
 
 ################### fix incorrect toc #########################################################
 def single_toc_item_index_fixer(section_title, content, model="gpt-4o-2024-11-20"):
-    tob_extractor_prompt = """
+    toc_extractor_prompt = """
     You are given a section title and several pages of a document, your job is to find the physical index of the start page of the section in the partial document.
 
     The provided pages contains tags like <physical_index_X> and <physical_index_X> to indicate the physical location of the page X.
@@ -756,7 +785,7 @@ def single_toc_item_index_fixer(section_title, content, model="gpt-4o-2024-11-20
     }
     Directly return the final JSON structure. Do not output anything else."""
 
-    prompt = tob_extractor_prompt + '\nSection Title:\n' + str(section_title) + '\nDocument pages:\n' + content
+    prompt = toc_extractor_prompt + '\nSection Title:\n' + str(section_title) + '\nDocument pages:\n' + content
     response = ChatGPT_API(model=model, prompt=prompt)
     json_content = extract_json(response)    
     return convert_physical_index_to_int(json_content['physical_index'])
@@ -818,9 +847,9 @@ async def fix_incorrect_toc(toc_with_page_number, page_list, incorrect_results, 
         page_contents=[]
         for page_index in range(prev_correct, next_correct+1):
             # Add bounds checking to prevent IndexError
-            list_index = page_index - start_index
-            if list_index >= 0 and list_index < len(page_list):
-                page_text = f"<physical_index_{page_index}>\n{page_list[list_index][0]}\n<physical_index_{page_index}>\n\n"
+            page_list_idx = page_index - start_index
+            if page_list_idx >= 0 and page_list_idx < len(page_list):
+                page_text = f"<physical_index_{page_index}>\n{page_list[page_list_idx][0]}\n<physical_index_{page_index}>\n\n"
                 page_contents.append(page_text)
             else:
                 continue
@@ -963,11 +992,6 @@ async def verify_toc(page_list, list_result, start_index=1, N=None, model=None):
 
 ################### main process #########################################################
 async def meta_processor(page_list, mode=None, toc_content=None, toc_page_list=None, start_index=1, opt=None, logger=None):
-    if start_index is None:
-        if logger:
-            logger.info("start_index is None, fallback to 1")
-        start_index = 1
-
     print(mode)
     print(f'start_index: {start_index}')
     
@@ -999,16 +1023,13 @@ async def meta_processor(page_list, mode=None, toc_content=None, toc_page_list=N
     if accuracy > 0.6 and len(incorrect_results) > 0:
         toc_with_page_number, incorrect_results = await fix_incorrect_toc_with_retries(toc_with_page_number, page_list, incorrect_results,start_index=start_index, max_attempts=3, model=opt.model, logger=logger)
         return toc_with_page_number
-    elif mode == 'process_toc_with_page_numbers':
-        return await meta_processor(page_list, mode='process_toc_no_page_numbers', toc_content=toc_content, toc_page_list=toc_page_list, start_index=start_index, opt=opt, logger=logger)
-    elif mode == 'process_toc_no_page_numbers':
-        return await meta_processor(page_list, mode='process_no_toc', start_index=start_index, opt=opt, logger=logger)
-    elif mode == 'process_no_toc' and accuracy > 0 and len(incorrect_results) > 0:
-        logger.info(f"process_no_toc fallback: accuracy {accuracy:.2f} below threshold, attempting fix anyway")
-        toc_with_page_number, incorrect_results = await fix_incorrect_toc_with_retries(toc_with_page_number, page_list, incorrect_results, start_index=start_index, max_attempts=3, model=opt.model, logger=logger)
-        return toc_with_page_number
     else:
-        raise Exception('Processing failed')
+        if mode == 'process_toc_with_page_numbers':
+            return await meta_processor(page_list, mode='process_toc_no_page_numbers', toc_content=toc_content, toc_page_list=toc_page_list, start_index=start_index, opt=opt, logger=logger)
+        elif mode == 'process_toc_no_page_numbers':
+            return await meta_processor(page_list, mode='process_no_toc', start_index=start_index, opt=opt, logger=logger)
+        else:
+            raise Exception('Processing failed')
         
  
 async def process_large_node_recursively(node, page_list, opt=None, logger=None):
@@ -1026,22 +1047,10 @@ async def process_large_node_recursively(node, page_list, opt=None, logger=None)
         
         if valid_node_toc_items and node['title'].strip() == valid_node_toc_items[0]['title'].strip():
             node['nodes'] = post_processing(valid_node_toc_items[1:], node['end_index'])
-            if len(valid_node_toc_items) > 1:
-                next_start = (
-                    valid_node_toc_items[1].get('start_index')
-                    or valid_node_toc_items[1].get('physical_index')
-                )
-                if next_start is not None:
-                    node['end_index'] = next_start
+            node['end_index'] = valid_node_toc_items[1]['start_index'] if len(valid_node_toc_items) > 1 else node['end_index']
         else:
             node['nodes'] = post_processing(valid_node_toc_items, node['end_index'])
-            if valid_node_toc_items:
-                next_start = (
-                    valid_node_toc_items[0].get('start_index')
-                    or valid_node_toc_items[0].get('physical_index')
-                )
-                if next_start is not None:
-                    node['end_index'] = next_start
+            node['end_index'] = valid_node_toc_items[0]['start_index'] if valid_node_toc_items else node['end_index']
         
     if 'nodes' in node and node['nodes']:
         tasks = [
@@ -1089,18 +1098,49 @@ async def tree_parser(page_list, opt, doc=None, logger=None):
     return toc_tree
 
 
-def page_index_main(doc, opt=None):
-    logger = JsonLogger(doc)
+from .utils import *
+from .page_index_md import md_to_tree
+import os
+import asyncio
+from io import BytesIO
+
+def page_index_main(doc, opt=None, doc_id=None, progress_callback=None):
+    logger = JsonLogger(doc, doc_id=doc_id, progress_callback=progress_callback)
     
-    is_valid_pdf = (
-        (isinstance(doc, str) and os.path.isfile(doc) and doc.lower().endswith(".pdf")) or 
+    is_valid_input = (
+        (isinstance(doc, str) and os.path.isfile(doc) and (doc.lower().endswith(".pdf") or doc.lower().endswith(".md"))) or 
         isinstance(doc, BytesIO)
     )
-    if not is_valid_pdf:
-        raise ValueError("Unsupported input type. Expected a PDF file path or BytesIO object.")
+    if not is_valid_input:
+        raise ValueError("Unsupported input type. Expected a PDF/Markdown file path or BytesIO object.")
 
+    # Handle Markdown separately
+    if isinstance(doc, str) and doc.lower().endswith(".md"):
+        if logger:
+            logger.progress(0, 100, "初始化", detail="正在启动 Markdown 解析引擎...")
+        
+        # md_to_tree is async, but page_index_main is sync (usually called in executor)
+        async def run_md():
+            return await md_to_tree(
+                md_path=doc,
+                if_thinning=True,
+                min_token_threshold=2000,
+                if_add_node_summary=opt.if_add_node_summary,
+                summary_token_threshold=200,
+                model=opt.model,
+                if_add_doc_description=opt.if_add_doc_description,
+                if_add_node_text=opt.if_add_node_text,
+                if_add_node_id=opt.if_add_node_id,
+                logger=logger
+            )
+        return asyncio.run(run_md())
+
+    # PDF Processing logic starts here
     print('Parsing PDF...')
-    page_list = get_page_tokens(doc)
+    if logger:
+        logger.progress(0, 100, "初始化", detail="正在准备页面内容")
+        
+    page_list = get_page_tokens(doc, model=opt.model, logger=logger)
 
     logger.info({'total_page_number': len(page_list)})
     logger.info({'total_token': sum([page[1] for page in page_list])})
@@ -1114,7 +1154,7 @@ def page_index_main(doc, opt=None):
         if opt.if_add_node_summary == 'yes':
             if opt.if_add_node_text == 'no':
                 add_node_text(structure, page_list)
-            await generate_summaries_for_structure(structure, model=opt.model)
+            await generate_summaries_for_structure(structure, model=opt.model, logger=logger)
             if opt.if_add_node_text == 'no':
                 remove_structure_text(structure)
             if opt.if_add_doc_description == 'yes':
@@ -1150,11 +1190,6 @@ def validate_and_truncate_physical_indices(toc_with_page_number, page_list_lengt
     Validates and truncates physical indices that exceed the actual document length.
     This prevents errors when TOC references pages that don't exist in the document (e.g. the file is broken or incomplete).
     """
-    if start_index is None:
-        if logger:
-            logger.info("validate_and_truncate_physical_indices received start_index=None, fallback to 1")
-        start_index = 1
-
     if not toc_with_page_number:
         return toc_with_page_number
     

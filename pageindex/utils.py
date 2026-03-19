@@ -36,10 +36,42 @@ def get_base_url():
     """Get base URL from global config or environment"""
     return _global_base_url or os.getenv("INDEX_BASE_URL")  # INDEX_BASE_URL can be set if you want to use a different base URL, or use default
 
+# def count_tokens(text, model=None):
+#     if not text:
+#         return 0
+#     enc = tiktoken.encoding_for_model(model)
+#     tokens = enc.encode(text)
+#     return len(tokens)
+
+_encoder_cache = {}
+
 def count_tokens(text, model=None):
     if not text:
         return 0
-    enc = tiktoken.encoding_for_model(model)
+    
+    # 清理模型名称（移除 ollama 标签如 :1.7b）
+    clean_model = str(model).lower().split(':')[0] if model else 'cl100k_base'
+    
+    if clean_model in _encoder_cache:
+        enc = _encoder_cache[clean_model]
+    else:
+        # 已知需要 cl100k_base 的模型前缀
+        ollama_prefixes = (
+            'qwen', 'llama', 'mistral', 'mixtral', 'phi', 
+            'gemma', 'deepseek', 'codellama', 'vicuna', 'yi',
+            'gpt', 'text-embedding'  # 也包含 OpenAI 模型
+        )
+        
+        # 如果是 Ollama 模型或未知模型，使用 cl100k_base
+        if any(clean_model.startswith(prefix) for prefix in ollama_prefixes) or clean_model == 'cl100k_base':
+            enc = tiktoken.get_encoding('cl100k_base')
+        else:
+            try:
+                enc = tiktoken.encoding_for_model(model)
+            except KeyError:
+                enc = tiktoken.get_encoding('cl100k_base')
+        _encoder_cache[clean_model] = enc
+    
     tokens = enc.encode(text)
     return len(tokens)
 
@@ -310,8 +342,10 @@ def get_pdf_name(pdf_path):
 
 
 class JsonLogger:
-    def __init__(self, file_path):
+    def __init__(self, file_path, doc_id=None, progress_callback=None):
         self.file_path = file_path
+        self.doc_id = doc_id
+        self.progress_callback = progress_callback
         
     def log(self, level, message, **kwargs):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -319,10 +353,15 @@ class JsonLogger:
             'timestamp': timestamp,
             'level': level,
             'message': message,
+            'doc_id': self.doc_id,
             **kwargs
         }
-        # Just print for now
+        # Print to console
         print(json.dumps(log_entry, ensure_ascii=False))
+        
+        # If it's a progress update and we have a callback, call it
+        if level == 'PROGRESS' and self.progress_callback:
+            self.progress_callback(log_entry)
 
     def info(self, message, **kwargs):
         self.log('INFO', message, **kwargs)
@@ -335,6 +374,10 @@ class JsonLogger:
 
     def exception(self, message, **kwargs):
         self.log('EXCEPTION', message, **kwargs)
+        
+    def progress(self, current, total, phase, detail=None, **kwargs):
+        self.log('PROGRESS', f"Phase: {phase}, {current}/{total}", 
+                 current=current, total=total, phase=phase, detail=detail, **kwargs)
 
 
 def list_to_tree(data):
@@ -400,12 +443,89 @@ def add_preface_if_needed(data):
     return data
 
 
-def get_page_tokens(pdf_path, model="gpt-4o-2024-11-20", pdf_parser="PyPDF2"):
-    """Extract pages with token counts from PDF"""
+def get_page_tokens(file_path, model="gpt-4o-2024-11-20", pdf_parser="PyPDF2", logger=None):
+    """Extract pages with token counts from PDF or Markdown"""
+    if str(file_path).lower().endswith(".md"):
+        # Handle Markdown
+        if logger:
+            logger.progress(0, 100, "准备页面", detail="正在读取 Markdown 文件...")
+            
+        if isinstance(file_path, str):
+            with open(file_path, "r", encoding="utf-8") as f:
+                content = f.read()
+        else:
+            # BytesIO
+            content = file_path.read().decode("utf-8")
+        
+        # Optimized Markdown splitting logic
+        if logger:
+            logger.progress(10, 100, "准备页面", detail="正在解析文档大纲...")
+
+        # Split by headers to create more natural boundaries
+        # We search for # Header 1 or ## Header 2 etc at the start of lines
+        header_sections = re.split(r'(^#+\s+.*)', content, flags=re.MULTILINE)
+        
+        # re.split with capturing group keeps the delimiters in the list
+        # We need to merge them back
+        sections = []
+        if header_sections[0].strip():
+            sections.append(header_sections[0])
+            
+        for i in range(1, len(header_sections), 2):
+            header = header_sections[i]
+            body = header_sections[i+1] if i+1 < len(header_sections) else ""
+            sections.append(header + body)
+
+        chunks = []
+        current_chunk = ""
+        current_tokens = 0
+        # Increased limit for MD to reduce number of "pages"
+        # 2500 tokens is about 3-5 standard pages of text
+        max_tokens_per_page = 2500 
+        
+        total_s = len(sections)
+        
+        if logger:
+            logger.progress(20, 100, "准备页面", detail=f"共有 {total_s} 个章节，正在合并虚拟页面...")
+
+        for i, section in enumerate(sections):
+            if not section.strip():
+                continue
+                
+            # For each section, we count tokens
+            # Sections are larger than paragraphs, so fewer calls
+            s_tokens = count_tokens(section, model)
+            
+            if current_tokens + s_tokens > max_tokens_per_page and current_chunk:
+                chunks.append([current_chunk.strip(), current_tokens])
+                current_chunk = section
+                current_tokens = s_tokens
+            else:
+                current_chunk += "\n\n" + section if current_chunk else section
+                current_tokens += s_tokens
+                
+            if logger and i % 5 == 0:
+                percent = 20 + int((i / total_s) * 70)
+                logger.progress(percent, 100, "准备页面", detail=f"正在合并章节 {i+1}/{total_s}...")
+        
+        if current_chunk:
+            chunks.append([current_chunk.strip(), current_tokens])
+            
+        if logger:
+            logger.progress(100, 100, "准备页面", detail=f"文档解析完成，共生成 {len(chunks)} 个虚拟页面")
+            
+        return chunks
+
     if pdf_parser == "PyPDF2":
-        pdf_reader = PyPDF2.PdfReader(pdf_path)
+        if logger:
+            logger.progress(0, 100, "准备页面", detail="正在打开 PDF 文件...")
+        pdf_reader = PyPDF2.PdfReader(file_path)
         page_list = []
-        for page_num in range(len(pdf_reader.pages)):
+        total_p = len(pdf_reader.pages)
+        
+        for page_num in range(total_p):
+            if logger:
+                logger.progress(page_num + 1, total_p, "提取文本", detail=f"正在解析第 {page_num+1}/{total_p} 页...")
             page = pdf_reader.pages[page_num]
             page_text = page.extract_text()
             token_count = count_tokens(page_text, model)
@@ -413,14 +533,86 @@ def get_page_tokens(pdf_path, model="gpt-4o-2024-11-20", pdf_parser="PyPDF2"):
         return page_list
     else:
         # PyMuPDF
-        doc = pymupdf.open(pdf_path)
+        doc = pymupdf.open(file_path)
         page_list = []
-        for page_num in range(len(doc)):
+        total_p = len(doc)
+        for page_num in range(total_p):
+            if logger:
+                logger.progress(page_num + 1, total_p, "提取文本", detail=f"正在解析第 {page_num+1}/{total_p} 页...")
             page = doc[page_num]
             page_text = page.get_text()
             token_count = count_tokens(page_text, model)
             page_list.append([page_text, token_count])
         return page_list
+
+
+def generate_text_image(text, output_path, title=None):
+    """Generate a simple image from text (used for Markdown preview)"""
+    from PIL import Image, ImageDraw, ImageFont
+    import textwrap
+    
+    # Configuration
+    width = 800
+    bg_color = (255, 255, 255)
+    text_color = (31, 41, 55)
+    margin = 40
+    line_spacing = 10
+    
+    # Try to load a font, fallback to default
+    try:
+        # Try some common fonts on Windows/Linux
+        font_paths = [
+            "C:/Windows/Fonts/msyh.ttc",  # Microsoft YaHei
+            "C:/Windows/Fonts/arial.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "Arial.ttf"
+        ]
+        font = None
+        for path in font_paths:
+            if os.path.exists(path):
+                font = ImageFont.truetype(path, 18)
+                title_font = ImageFont.truetype(path, 24)
+                break
+        if not font:
+            font = ImageFont.load_default()
+            title_font = ImageFont.load_default()
+    except:
+        font = ImageFont.load_default()
+        title_font = ImageFont.load_default()
+
+    # Wrap text
+    chars_per_line = 70
+    lines = []
+    for paragraph in text.split('\n'):
+        if not paragraph.strip():
+            lines.append("")
+            continue
+        wrapped = textwrap.wrap(paragraph, width=chars_per_line)
+        lines.extend(wrapped)
+
+    # Calculate height
+    line_height = font.getbbox("Ay")[3] - font.getbbox("Ay")[1] + line_spacing
+    total_height = (len(lines) * line_height) + (margin * 2) + 50 # +50 for title
+    
+    # Create image
+    img = Image.new('RGB', (width, max(total_height, 600)), color=bg_color)
+    draw = ImageDraw.Draw(img)
+    
+    # Draw title
+    y = margin
+    if title:
+        draw.text((margin, y), title, font=title_font, fill=(79, 70, 229))
+        y += 40
+        draw.line((margin, y, width - margin, y), fill=(226, 232, 240), width=1)
+        y += 20
+    
+    # Draw lines
+    for line in lines:
+        draw.text((margin, y), line, font=font, fill=text_color)
+        y += line_height
+        
+    img.save(output_path, "JPEG", quality=85)
+    return output_path
 
 
 def get_text_of_pdf_pages(pdf_pages, start_page, end_page):
@@ -612,9 +804,27 @@ async def generate_node_summary(node, model=None):
     return response
 
 
-async def generate_summaries_for_structure(structure, model=None):
+async def generate_summaries_for_structure(structure, model=None, logger=None):
     nodes = structure_to_list(structure)
-    tasks = [generate_node_summary(node, model=model) for node in nodes]
+    total_nodes = len(nodes)
+    
+    if logger:
+        logger.progress(0, total_nodes, "生成摘要", detail=f"准备为 {total_nodes} 个节点生成摘要...")
+        
+    tasks = []
+    for i, node in enumerate(nodes):
+        tasks.append(generate_node_summary(node, model=model))
+        
+    # We can use asyncio.as_completed to get progress
+    summaries = [None] * total_nodes
+    for i, future in enumerate(asyncio.as_completed(tasks)):
+        summary = await future
+        # Match summary back to task? asyncio.as_completed doesn't preserve order easily
+        # Let's just collect and assign at end, but report progress
+        if logger:
+            logger.progress(i + 1, total_nodes, "生成摘要", detail=f"已完成 {i+1}/{total_nodes} 个节点的摘要生成")
+            
+    # Re-run properly to preserve order or use a wrapper
     summaries = await asyncio.gather(*tasks)
     
     for node, summary in zip(nodes, summaries):
