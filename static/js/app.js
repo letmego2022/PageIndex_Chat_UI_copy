@@ -494,6 +494,23 @@ async function saveSettings() {
     showNotification('配置已保存');
 }
 
+function switchModel(type) {
+    currentModelType = type;
+    updateModelToggle();
+}
+
+function updateModelToggle() {
+    const t = document.getElementById('textModelBtn');
+    const v = document.getElementById('visionModelBtn');
+    if (t) t.classList.toggle('active', currentModelType === 'text');
+    if (v) v.classList.toggle('active', currentModelType === 'vision');
+}
+
+function toggleMemory(enabled) {
+    useMemory = enabled;
+    console.log('Conversation memory:', useMemory ? 'Enabled' : 'Disabled');
+}
+
 function handleIndexingProgress(data) {
     const { doc_id, current, total, phase, detail } = data;
     const item = document.querySelector(`.doc-item[data-doc-id="${doc_id}"]`);
